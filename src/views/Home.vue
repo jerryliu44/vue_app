@@ -123,7 +123,9 @@
                     <div class="title"><svg t="1705257422086" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1891" >
                             <path d="M629.333333 202.666667v213.333333h277.333334v448h-512v-213.333333h-277.333334v-448h512z m213.333334 277.333333h-213.333334v170.666667h-170.666666v149.333333h384v-320z m-277.333334-213.333333h-384v320h213.333334v-170.666667h170.666666v-149.333333z m0 213.333333h-106.666666v106.666667h106.666666v-106.666667z"  p-id="1892"></path>
                         </svg>site </div>
-                    <div class="projectList"><a class="projectItem a" target="_blank" href="https://blog.liuyh68.net">
+                    <div class="projectList">
+                        <!-- <a class="projectItem a" target="_blank" href="https://blog.liuyh68.net"> -->
+                        <a class="projectItem a" target="_blank" @click.prevent="handleClick">
                             <div class="projectItemLeft">
                                 <h1>博客</h1>
                                 <p>记录摆烂日常</p>
@@ -232,6 +234,8 @@
 </template>
   
 <script>
+    import * as Api from '@/api/api';
+    
     export default {
         name: 'MainContent',
         mounted() {
@@ -436,7 +440,19 @@
                     pageLoading.style.opacity = '0';
                 }, 100);
             });
+        },
+        method : {
+            // 发送 API 请求
+            async handleClick() {
+                try {
+                    const response = await Api.get_example();
+                    console.log('API response:', response);
+                } catch (error) {
+                    console.error('API request failed:', error);
+                }
+            }
         }
+
     };
 </script>
 
