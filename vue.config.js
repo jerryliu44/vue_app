@@ -6,5 +6,4 @@ module.exports = {
         'Cache-Control': 'no-cache',
       },
     }
-  };
-  
+};

@@ -5,7 +5,6 @@
             </div>
         </div>
         <div class="liuyh68-filter"></div>
-
         <div class="liuyh68-main">
             <div class="liuyh68-left">
                 <div class="logo" style="background-image: url(/images/logo.jpg);">
@@ -378,9 +377,6 @@
 
             //     // 应用初始主题
             //     changeTheme(themeState);
-
-
-
 
 
                 // 显示FPS帧数
