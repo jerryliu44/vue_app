@@ -1,22 +1,17 @@
 <template>  
     <div id="app">  
-        <MainContentComponent />
+        <Home />
     </div>  
 </template>  
   
 <script>
-import HeaderComponent from './components/HeaderComponent.vue'; 
-import SidebarComponent from './components/SidebarComponent.vue';
-import MainContentComponent from './components/MainContentComponent.vue';
-
+import Home from './views/Home.vue'
 
 export default {  
     name: 'App',  
     components: {
-        // HeaderComponent 
-        // SidebarComponent,  
-        MainContentComponent  
-    }  
+        Home
+    }   
 }
 </script>
   
