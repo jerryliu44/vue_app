@@ -1,15 +1,24 @@
 <template>
     <div>
-        <div id="liuyh68-loading">
-            <div id="liuyh68-loading-center">
-            </div>
-        </div>
-        <div class="liuyh68-filter"></div>
+        <div><LoadingSpinner /></div>
+        <div><BackgroundFilter /></div>
         <div class="liuyh68-main">
             <div class="liuyh68-left">
-                <div class="logo" style="background-image: url(/images/logo.jpg);">
+                <!-- <div class="logo" style="background-image: url(/images/logo.jpg);">
                     <img style="position: absolute;top:-27%;left:-10%;width: 120%; aspect-ratio: 1/1;"
                         src="/images/logokuang.png">
+                </div> -->
+                <div>
+                    <Logo 
+                        :frameStyle="{
+                            position: 'absolute',
+                            top: '-15%',
+                            left: '-10%',
+                            width: '120%',
+                            aspectRatio: '1/1'
+                        }"
+                        containerClass="index-logo"
+                    />
                 </div>
                 <div class="left-div left-des">
                     <div class="left-des-item"><svg t="1705773709627" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1478"><path d="M512 249.976471c-99.388235 0-180.705882 81.317647-180.705882 180.705882s81.317647 180.705882 180.705882 180.705882 180.705882-81.317647 180.705882-180.705882-81.317647-180.705882-180.705882-180.705882z m0 301.17647c-66.258824 0-120.470588-54.211765-120.470588-120.470588s54.211765-120.470588 120.470588-120.470588 120.470588 54.211765 120.470588 120.470588-54.211765 120.470588-120.470588 120.470588z" p-id="1479"></path><path d="M512 39.152941c-216.847059 0-391.529412 174.682353-391.529412 391.529412 0 349.364706 391.529412 572.235294 391.529412 572.235294s391.529412-222.870588 391.529412-572.235294c0-216.847059-174.682353-391.529412-391.529412-391.529412z m0 891.482353C424.658824 873.411765 180.705882 686.682353 180.705882 430.682353c0-183.717647 147.576471-331.294118 331.294118-331.294118s331.294118 147.576471 331.294118 331.294118c0 256-243.952941 442.729412-331.294118 499.952941z" p-id="1480"></path></svg>China-ShenZhen
@@ -68,10 +77,22 @@
             </div>
             <div class="liuyh68-right">
                 <header>
-                    <div class="index-logo" style="background-image: url(/images/logo.jpg);">
+                    <!-- <div class="index-logo" style="background-image: url(/images/logo.jpg);">
                         <img style="position: absolute;top:-15%;left:-10%;width: 120%; aspect-ratio: 1/1;"
                             src="/images/logokuang.png">
-                    </div>
+                    </div> -->
+                    <!-- <div>
+                        <Logo 
+                            :frameStyle="{
+                                position: 'absolute',
+                                top: '-15%',
+                                left: '-10%',
+                                width: '120%',
+                                aspectRatio: '1/1'
+                            }"
+                            containerClass="index-logo"
+                        />
+                    </div> -->
                     <div class="welcome">
                         Hello I' m <span class="gradientText">
                             liuyh </span>
@@ -235,9 +256,17 @@
   
 <script>
     import * as Api from '@/api/api';
+    import LoadingSpinner from '@/components/LoadingSpinner.vue';
+    import BackgroundFilter from '@/components/BackgroundFilter.vue';
+    import Logo from '@/components/Logo.vue';
     
     export default {
         name: 'MainContent',
+        components: {
+            LoadingSpinner,
+            BackgroundFilter,
+            Logo
+        },
         mounted() {
             document.addEventListener('contextmenu', function (event) {
                 event.preventDefault();
@@ -434,12 +463,6 @@
                 
             });
 
-            var pageLoading = document.querySelector("#liuyh68-loading");
-            window.addEventListener('load', function() {
-                setTimeout(function () {
-                    pageLoading.style.opacity = '0';
-                }, 100);
-            });
         },
         methods : {
             // 发送 API 请求
@@ -560,66 +583,6 @@ body {
 
 }
 
-/* 加载界面圆点动画 */
-#liuyh68-loading {
-    background: radial-gradient(white, #d8eaff);
-    background-size: 100%;
-    background-position: center;
-
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    z-index: 999999;
-    margin-top: 0px;
-    top: 0px;
-    pointer-events: none;
-    opacity: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-
-#liuyh68-loading-center {
-    height: 150px;
-    width: 150px;
-    position: relative;
-    border-radius: 50%;
-    background: #472eff;
-
-    animation: zoom 1s linear infinite;
-}
-
-@keyframes zoom {
-    0% {
-        transform: scale(0);
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.5;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 0;
-    }
-}
-
-
-
-/* 背景模糊滤镜 */
-.liuyh68-filter {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: var(--back_filter_color);
-    backdrop-filter:  blur(var(--back_filter));
-    -webkit-backdrop-filter: blur(var(--back_filter));
-    z-index: -99999999;
-   
-}
 
 /* 主体布局容器 */
 .liuyh68-main {
@@ -653,7 +616,7 @@ body {
 }
 
 
-
+/* 
 .logo {
     flex-shrink: 0;
     width: 90%;
@@ -662,7 +625,7 @@ body {
     margin-top: 50px;
     background-size: cover;
     border-radius: 50%;
-}
+} */
 
 
 /* 左侧地理区位导航栏布局容器 */
@@ -790,7 +753,7 @@ body {
 
 
 
-.index-logo {
+/* .index-logo {
     flex-shrink: 0;
     width: 40%;
     margin-top: 30px;
@@ -800,7 +763,7 @@ body {
     background-size: cover;
     border-radius: 50%;
     border: 0.5px solid #ffffff;
-}
+} */
 
 .description {
 
@@ -1142,7 +1105,7 @@ footer {
     .a {
 
         width: calc(50% - 18px);
-  margin: 9px;
+        margin: 9px;
 
     }
 
