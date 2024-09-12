@@ -441,11 +441,15 @@
                 }, 100);
             });
         },
-        method : {
+        methods : {
             // 发送 API 请求
             async handleClick() {
                 try {
-                    const response = await Api.get_example();
+                    const login_data = {
+                        username: "1223",
+                        password: "2121"
+                    };
+                    const response = await Api.get_example(login_data);
                     console.log('API response:', response);
                 } catch (error) {
                     console.error('API request failed:', error);

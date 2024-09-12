@@ -3,6 +3,7 @@ import axios from 'axios';
 
 
 axios.defaults.withCredentials = true;
+const waiting_time = 10000;
 
 // 请求拦截器
 axios.interceptors.request.use(config => {
@@ -24,7 +25,7 @@ axios.interceptors.request.use(config => {
 
 // 创建 Axios 实例
 const apiClient = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL || 'http://localhost:5000/api',
+  baseURL: process.env.VUE_APP_API_BASE_URL || 'http://localhost:5000',
   timeout: 90000, // 请求超时时间（毫秒）
   headers: {
     'Content-Type': 'application/json',
