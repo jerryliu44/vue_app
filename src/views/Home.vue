@@ -65,15 +65,10 @@
                             <img src="/images/Wechat_light.svg" alt="Icon" style="width: 25px; height: 25px;">
                             <div class="iconTip">WX</div>
                         </a>
-                        <!-- <a class="iconItem" onclick="pop('/images/wxzsm.jpg')" href="javascript:void(0)">
+                        <a class="iconItem" @click="pop('/images/qq.jpg')" href="javascript:void(0)">
                             <img src="/images/UpFilled_light.svg" alt="Icon" style="width: 20px; height: 20px;">
                             <div class="iconTip">Like</div>
-                        </a> -->
-                        <a @click="togglePopup('/images/wxzsm.jpg')" class="iconItem">  
-                            <img src="/images/UpFilled_light.svg" alt="Icon" style="width: 20px; height: 20px;">  
-                            <div class="iconTip">Like</div>  
-                        </a>  
-                        <Popup :imageURL="popupImageURL" :isVisible="isPopupVisible" />  
+                        </a>
                         <a class="switch">
                             <div class="onoffswitch">
                                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
@@ -202,14 +197,12 @@
     import * as Api from '@/api/api';
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
     import BackgroundFilter from '@/components/BackgroundFilter.vue';
-    import Popup from '@/components/Popup.vue';
     
     export default {
         name: 'MainContent',
         components: {
             LoadingSpinner,
             BackgroundFilter,
-            Popup,
         },
         data() {  
             return {  
@@ -250,26 +243,6 @@
                     element.classList.toggle(className);
                 });
             }
-
-            function pop(imageURL) {
-                var tcMainElement = document.querySelector(".tc-img");
-                if (imageURL) {
-                    tcMainElement.src = imageURL;
-                }
-                toggleClass(".tc-main", "active");
-                toggleClass(".tc", "active");
-            }
-
-            var tc = document.getElementsByClassName('tc');
-            var tc_main = document.getElementsByClassName('tc-main');
-            tc[0].addEventListener('click', function (event) {
-                pop();
-            });
-            tc_main[0].addEventListener('click', function (event) {
-                event.stopPropagation();
-            });
-
-
 
             function setCookie(name, value, days) {
                 var expires = "";
@@ -335,10 +308,21 @@
 
         },
         methods : {
-            togglePopup(imageURL) {  
-                this.popupImageURL = imageURL;  
-                this.isPopupVisible = !this.isPopupVisible;  
+            pop(imageURL = null) {  
+                const tcMainElement = this.$el.querySelector(".tc-img");  
+                if (imageURL) {  
+                    tcMainElement.src = imageURL;  
+                }  
+                this.toggleClass('.tc-main', 'active');  
+                this.toggleClass('.tc', 'active');  
+            },  
+            toggleClass(selector, className) {  
+                const elements = this.$el.querySelectorAll(selector);  
+                elements.forEach(element => {  
+                    element.classList.toggle(className);  
+                });  
             },
+
             // 发送 API 请求
             async handleClick() {
                 try {
