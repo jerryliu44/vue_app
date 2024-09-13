@@ -61,13 +61,19 @@
                         </a><a class="iconItem" onclick="" href="mailto:i@liuyh68.net">
                             <img src="/images/Mail_light.svg" alt="Icon" style="width: 23px; height: 23px;">
                             <div class="iconTip">Mail</div>
-                        </a><a class="iconItem" onclick="pop('/images/qq.jpg')" href="javascript:void(0)">
+                        </a><a class="iconItem" @click="pop('/images/wxzsm.jpg')" href="javascript:void(0)">
                             <img src="/images/Wechat_light.svg" alt="Icon" style="width: 25px; height: 25px;">
                             <div class="iconTip">WX</div>
-                        </a><a class="iconItem" onclick="pop('/images/wxzsm.jpg')" href="javascript:void(0)">
+                        </a>
+                        <!-- <a class="iconItem" onclick="pop('/images/wxzsm.jpg')" href="javascript:void(0)">
                             <img src="/images/UpFilled_light.svg" alt="Icon" style="width: 20px; height: 20px;">
                             <div class="iconTip">Like</div>
-                        </a>
+                        </a> -->
+                        <a @click="togglePopup('/images/wxzsm.jpg')" class="iconItem">  
+                            <img src="/images/UpFilled_light.svg" alt="Icon" style="width: 20px; height: 20px;">  
+                            <div class="iconTip">Like</div>  
+                        </a>  
+                        <Popup :imageURL="popupImageURL" :isVisible="isPopupVisible" />  
                         <a class="switch">
                             <div class="onoffswitch">
                                 <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch"
@@ -90,7 +96,6 @@
                         <img src="/images/site_light.svg" alt="Icon" style="width: 25px; height: 25px; margin-right: 8px;">
                     site </div>
                     <div class="projectList">
-                        <!-- <a class="projectItem a" target="_blank" href="https://blog.liuyh68.net"> -->
                         <a class="projectItem a" target="_blank" @click.prevent="handleClick">
                             <div class="projectItemLeft">
                                 <h1>博客</h1>
@@ -140,7 +145,6 @@
                             <div class="projectItemRight">
                                 <img src="/images/i1.png" alt="">
                             </div>
-
                         </a><a class="projectItem b" target="_blank" href="https://i.liuyh68.cc">
                             <div class="projectItemLeft">
                                 <h1>云盘</h1>
@@ -149,7 +153,6 @@
                             <div class="projectItemRight">
                                 <img src="/images/i2.png" alt="">
                             </div>
-
                         </a>
                         <a class="projectItem b" target="_blank" href="https://liuyh68.cc">
                             <div class="projectItemLeft">
@@ -168,9 +171,7 @@
                             <div class="projectItemRight">
                                 <img src="/images/i4.png" alt="">
                             </div>
-
                         </a></div>
-                
                 
                     <div class="title">
                         <img src="/images/skill_light.svg" alt="Icon" style="width: 25px; height: 25px; margin-right: 8px;">
@@ -192,8 +193,8 @@
             <div onclick="" class="tc-main">
                 <img class="tc-img" src="" alt="" srcset="">
             </div>
-
         </div>
+
     </div>
 </template>
   
@@ -201,13 +202,21 @@
     import * as Api from '@/api/api';
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
     import BackgroundFilter from '@/components/BackgroundFilter.vue';
+    import Popup from '@/components/Popup.vue';
     
     export default {
         name: 'MainContent',
         components: {
             LoadingSpinner,
             BackgroundFilter,
+            Popup,
         },
+        data() {  
+            return {  
+                popupImageURL: '',  
+                isPopupVisible: false  
+            };  
+        },  
         mounted() {
             document.addEventListener('contextmenu', function (event) {
                 event.preventDefault();
@@ -321,91 +330,15 @@
 
                 changeTheme(themeState);
 
-            // document.addEventListener('DOMContentLoaded', function () {
-            //     var html = document.querySelector('html');
-            //     var themeState = getCookie("themeState") || "light"; // 默认为亮色主题
-            //     var tanChiShe = document.getElementById("tanChiShe");
-
-            //     function changeTheme(theme) {
-            //         tanChiShe.src = "./static/svg/snake-" + theme + ".svg";
-            //         html.dataset.theme = theme; // 设置 data-theme 属性
-            //         setCookie("themeState", theme, 365);
-            //         themeState = theme;
-            //     }
-
-            //     var Checkbox = document.getElementById('myonoffswitch');
-            //     Checkbox.addEventListener('change', function () {
-            //         if (themeState === "dark") {
-            //             changeTheme("light");
-            //         } else {
-            //             changeTheme("dark");
-            //         }
-            //     });
-
-            //     // 初始化时设置 Checkbox 状态
-            //     if (themeState === "dark") {
-            //         Checkbox.checked = true;
-            //     } else {
-            //         Checkbox.checked = false;
-            //     }
-
-            //     // 应用初始主题
-            //     changeTheme(themeState);
-
-
-                // 显示FPS帧数
-
-                // var fpsElement = document.createElement('div');
-                // fpsElement.id = 'fps';
-                // fpsElement.style.zIndex = '10000';
-                // fpsElement.style.position = 'fixed';
-                // fpsElement.style.left = '0';
-                // document.body.insertBefore(fpsElement, document.body.firstChild);
-
-                // var showFPS = (function () {
-                //     var requestAnimationFrame = window.requestAnimationFrame ||
-                //         window.webkitRequestAnimationFrame ||
-                //         window.mozRequestAnimationFrame ||
-                //         window.oRequestAnimationFrame ||
-                //         window.msRequestAnimationFrame ||
-                //         function (callback) {
-                //             window.setTimeout(callback, 1000 / 60);
-                //         };
-
-                //     var fps = 0,
-                //         last = Date.now(),
-                //         offset, step, appendFps;
-
-                //     step = function () {
-                //         offset = Date.now() - last;
-                //         fps += 1;
-
-                //         if (offset >= 1000) {
-                //             last += offset;
-                //             appendFps(fps);
-                //             fps = 0;
-                //         }
-
-                //         requestAnimationFrame(step);
-                //     };
-
-                //     appendFps = function (fpsValue) {
-                //         fpsElement.textContent = 'FPS: ' + fpsValue;
-                //     };
-
-                //     step();
-                // })();
-                
-                
-                
-                //pop('./static/img/tz.jpg')
-                
-                
-                
+            
             });
 
         },
         methods : {
+            togglePopup(imageURL) {  
+                this.popupImageURL = imageURL;  
+                this.isPopupVisible = !this.isPopupVisible;  
+            },
             // 发送 API 请求
             async handleClick() {
                 try {
@@ -427,7 +360,61 @@
 
 
 
-<style scoped>
+<style> 
+
+html {
+    --name: 主题5(图片模糊背景＋黑色透明卡片+白色svg);
+    --main_bg_color: url('/images/background1.jpg');
+    --main_text_color: #eeeeee;
+    --gradient: linear-gradient(120deg, #bd34fe, #e0321b 30%, #41d1ff 60%);
+    --purple_text_color: #747bff;
+    --text_bg_color: #00000040;
+    --item_bg_color: #00000038;
+    --item_hover_color: #33333338;
+    --item_left_title_color: #ffffff;
+    --item_left_text_color: #ffffff;
+    --footer_text_color: #ffffff;
+    --left_tag_item: rgb(27 42 57 / 20%);
+    --card_filter: 0px;
+    --back_filter: 19px;
+    --back_filter_color: #00000030;
+    --fill:#ffffff;
+}
+
+body {
+    height: 100%;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    font-family: "b",  "a", sans-serif;
+    background: var(--main_bg_color);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    transition: color 0.1s ease;
+    color: var(--main_text_color);
+
+}
+
+html[data-theme="Dark"] {
+    
+    --main_text_color: #fff;
+    --gradient:linear-gradient(120deg, rgb(133, 62, 255), #f76cc6 30%, rgb(255, 255, 255) 60%);
+    --purple_text_color: #747bff;
+    --text_bg_color: rgb(26, 4, 48);
+    --item_bg_color: rgb(19, 20, 24);
+    --item_hover_color: rgb(19, 23, 27);
+    --item_left_title_color: rgb(255, 255, 255);
+    --item_left_text_color: rgb(142, 142, 142);
+    --footer_text_color: #646464;
+    --left_tag_item: linear-gradient(50deg, #1f2327, #000000);
+    --card_filter: 0px;
+    --back_filter: 0px;
+    --back_filter_color: #000000;
+    --fill:#ffffff;
+}
+
 @font-face {
     font-family: "a";
     /*中文字体*/
@@ -484,44 +471,6 @@ a:focus {
 /* 滑轨 */
 ::-webkit-scrollbar-track {
     background-color: var(--main_bg_color, linear-gradient(50deg, #a2d0ff, #ffffff));
-}
-
-
-
-html[data-theme="Dark"] {
-    
-    --main_text_color: #fff;
-    --gradient:linear-gradient(120deg, rgb(133, 62, 255), #f76cc6 30%, rgb(255, 255, 255) 60%);
-    --purple_text_color: #747bff;
-    --text_bg_color: rgb(26, 4, 48);
-    --item_bg_color: rgb(19, 20, 24);
-    --item_hover_color: rgb(19, 23, 27);
-    --item_left_title_color: rgb(255, 255, 255);
-    --item_left_text_color: rgb(142, 142, 142);
-    --footer_text_color: #646464;
-    --left_tag_item: linear-gradient(50deg, #1f2327, #000000);
-    --card_filter: 0px;
-    --back_filter: 0px;
-    --back_filter_color: #000000;
-    --fill:#ffffff;
-}
-
-
-
-body {
-    height: 100%;
-    min-height: 100vh;
-    width: 100%;
-    position: relative;
-    font-family: "b",  "a", sans-serif;
-    background: var(--main_bg_color);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    transition: color 0.1s ease;
-    color: var(--main_text_color);
-
 }
 
 
@@ -613,8 +562,7 @@ body {
     flex-wrap: wrap;
     padding: 14px;
 }
-
-/* 左侧标签属性
+/* 左侧标签属性 */
 .left-tag-item {
     display: flex;
     justify-content: center;
@@ -625,7 +573,7 @@ body {
     font-size: 13px;
     border-radius: 10px;
     background: var(--left_tag_item);
-} */
+}
 
 
 /* 左侧滚动栏属性 */
@@ -683,8 +631,10 @@ body {
 
 
 
+
 /* Hello */
 .welcome {
+
     font-size: 65px;
     font-weight: 800;
     margin: 20px 0;
@@ -730,19 +680,15 @@ body {
     0% {
         background-position: 100%;
     }
-
     25% {
         background-position: 50%;
     }
-
     50% {
         background-position: 0%;
     }
-
     75% {
         background-position: 50%;
     }
-
     100% {
         background-position: 100%;
     }
@@ -776,8 +722,6 @@ body {
 .iconContainer::-webkit-scrollbar {
     display: none;
 }
-
-
 
 .iconItem {
     width: 49px;
@@ -819,13 +763,9 @@ body {
 }
 
 .iconTip {
-    padding-left: 5%;
     white-space: nowrap;
     display: none;
 }
-
-
-
 
 
 .iconItem:hover {
@@ -879,36 +819,75 @@ body {
 }
 
 .projectItem {
-    margin: 7px;
     display: flex;
     background-color: var(--item_bg_color);
     border-radius: 8px;
     padding: 15px;
-    height: 100px; /* 统一设置高度 */
+    height: 100px;
     width: calc(25% - 15px);
-    backdrop-filter: blur(var(--card_filter));
-    transition: opacity 0.5s ease, background-color 0.2s ease, border 0.2s ease, transform 0.3s ease; /* 统一过渡效果 */
+    backdrop-filter: blur(var(--card_filter));-webkit-backdrop-filter: blur(var(--card_filter));
+    transition: opacity 0.5s ease, background-color 0.2s ease, border 0.2s ease, transform 0.3s ease;
+
 }
+
 
 .projectItem:hover {
     box-shadow: 0 8px 16px -4px #2c2d300c;
     transform: translateY(-2px);
+
 }
 
+.projectItem.pressed {
+    transform: scale(0.9);
+    /* 缩小到原来的0.9倍 */
+    background-color: var(--item_hover_color);
+}
+
+
+.projectItemLeft {
+    transition: width 0.4s ease;
+    height: 100%;
+    width: 80%;
+}
+
+.projectItem:hover .projectItemLeft {
+    width: 100%;
+}
+
+.projectItem:hover h1 {
+    font-size: 18px;
+}
+
+.projectItemLeft p {
+    font-size: 12px;
+    margin-top: 15px;
+    color: var(--item_left_text_color);
+}
+
+
+.projectItemLeft h1 {
+    font-weight: normal;
+    font-size: 16px;
+    margin: 0px;
+
+    transition: font-size 0.4s ease;
+    color: var(--item_left_title_color);
+}
+
+
 .projectItemRight {
-    opacity: 1;
-    transform: scaleX(1); /* 初始状态 */
+    overflow: hidden;
     transition: opacity 0.4s ease, transform 0.4s ease; /* 统一过渡效果 */
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20%;
+    width: 20%; /* 初始宽度 */
     height: 100%;
-    overflow: hidden;
+    transform-origin: center; /* 确保从中间收缩 */
 }
 
 .projectItem:hover .projectItemRight {
-    opacity: 0;
+    opacity: 0; /* 使元素透明 */
     transform: scaleX(0); /* 收缩到0 */
 }
 
@@ -945,7 +924,6 @@ footer {
     font-size: 13px;
     bottom: 0;
 }
-
 
 @media (min-width: 800px) {
 
@@ -991,7 +969,7 @@ footer {
     .a {
 
         width: calc(50% - 18px);
-        margin: 9px;
+  margin: 9px;
 
     }
 
@@ -1052,21 +1030,7 @@ footer {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
 
 
 .tc {
@@ -1118,13 +1082,6 @@ footer {
     transform: translateY(0) scale(1);
 
 }
-
-
-
-
-
-
-
 
 
 .onoffswitch {
