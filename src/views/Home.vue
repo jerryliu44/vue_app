@@ -818,6 +818,22 @@ a:focus {
     flex-wrap: wrap;
 }
 
+
+.projectItem {
+    margin: 7px;
+    display: flex;
+    background-color: var(--item_bg_color);
+    border-radius: 8px;
+    padding: 15px;
+    height: 95px;
+    width: calc(25% - 15px);
+    backdrop-filter: blur(var(--card_filter));-webkit-backdrop-filter: blur(var(--card_filter));
+    -webkit-backdrop-filter: blur(var(--card_filter));-webkit-backdrop-filter: blur(var(--card_filter));
+    transition: opacity 0.3s ease, background-color 0.3s ease, border 0.3s ease, transform 0.2s ease;
+
+
+}
+
 .projectItem {
     display: flex;
     background-color: var(--item_bg_color);
@@ -830,7 +846,6 @@ a:focus {
 
 }
 
-
 .projectItem:hover {
     box-shadow: 0 8px 16px -4px #2c2d300c;
     transform: translateY(-2px);
@@ -839,9 +854,9 @@ a:focus {
 
 .projectItem.pressed {
     transform: scale(0.9);
-    /* 缩小到原来的0.9倍 */
     background-color: var(--item_hover_color);
 }
+
 
 
 .projectItemLeft {
@@ -877,24 +892,27 @@ a:focus {
 
 .projectItemRight {
     overflow: hidden;
-    transition: opacity 0.4s ease, transform 0.4s ease; /* 统一过渡效果 */
+    transition: opacity 0.4s ease, transform 0.4s ease; 
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 20%; /* 初始宽度 */
+    width: 20%; 
     height: 100%;
-    transform-origin: center; /* 确保从中间收缩 */
+    transform-origin: center; 
 }
 
 .projectItem:hover .projectItemRight {
-    opacity: 0; /* 使元素透明 */
-    transform: scaleX(0); /* 收缩到0 */
+    opacity: 0; 
+    transform: scaleX(0); 
 }
 
 .projectItemRight img {
     height: 39px;
     width: 39px;
-}
+} 
+
+
+
 
 
 .skill {
