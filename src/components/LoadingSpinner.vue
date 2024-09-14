@@ -23,7 +23,7 @@ export default {
     hideLoading() {
       setTimeout(() => {
         this.isLoading = false;
-      }, 1000);
+      }, 100);
     }
   }
 };
@@ -42,7 +42,7 @@ export default {
   z-index: 999999;
   margin-top: 0px;
   top: 0px;
-  pointer-events: none;
+  pointer-events: all;
   opacity: 1;
   display: flex;
   justify-content: center;
