@@ -204,12 +204,6 @@
             LoadingSpinner,
             BackgroundFilter,
         },
-        data() {  
-            return {  
-                popupImageURL: '',  
-                isPopupVisible: false  
-            };  
-        },  
         mounted() {
             // 禁用右键菜单
             document.addEventListener('contextmenu', function (event) {
@@ -322,7 +316,6 @@
                     element.classList.toggle(className);
                 });
             },
-
             pop(imageURL) {
                 var tcMainElement = document.querySelector(".tc-img");
                 if (imageURL) {
@@ -331,7 +324,6 @@
                 this.toggleClass(".tc-main", "active");
                 this.toggleClass(".tc", "active");
             },
-
 
             // 发送 API 请求
             async handleClick() {
