@@ -18,10 +18,10 @@ export default new Vuex.Store({
       commit('setLoading', true);
     },
     hideLoading({ commit }) {
-      // 在 Vuex actions 中添加延时逻辑
-      setTimeout(() => {
+    //   setTimeout(() => {
+    //     commit('setLoading', false);
+    //   }, 3000); // 这里的300毫秒是消失时间，你可以根据需要调整
         commit('setLoading', false);
-      }, 3000); // 这里的300毫秒是消失时间，你可以根据需要调整
     }
   }
 });

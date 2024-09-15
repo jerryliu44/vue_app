@@ -25,13 +25,28 @@ const router = new Router({
   ]
 });
 
-router.beforeEach((to, from, next) => {
-  store.dispatch('showLoading'); // 显示加载动画
-  next();
+
+// router.beforeEach((to, from, next) => {
+//   store.dispatch('showLoading'); // 显示加载动画
+//   next();
+// });
+
+// router.afterEach((to, from) => {
+//   store.dispatch('hideLoading'); // 隐藏加载动画
+// });
+router.afterEach((to, from) => {
+  if (document.readyState === 'complete') {
+    // 页面已经加载完成时直接隐藏
+    store.dispatch('hideLoading');
+  } else {
+    // 页面还未加载完成时，监听 load 事件
+    const onLoad = () => {
+      store.dispatch('hideLoading');
+      window.removeEventListener('load', onLoad); // 只监听一次
+    };
+    window.addEventListener('load', onLoad);
+  }
 });
 
-router.afterEach((to, from) => {
-  store.dispatch('hideLoading'); // 隐藏加载动画
-});
 
 export default router;
