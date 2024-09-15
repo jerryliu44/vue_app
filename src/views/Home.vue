@@ -58,7 +58,8 @@
                         <a class="iconItem" onclick="" href="https://github.com/liuyh68666">
                             <img src="/images/Github_light.svg" alt="Icon" style="width: 25px; height: 25px;">
                             <div class="iconTip">Github</div>
-                        </a><a class="iconItem" onclick="" href="mailto:i@liuyh68.net">
+                        </a>
+                        <a class="iconItem" @click="goToAbout" href="javascript:void(0)">
                             <img src="/images/Mail_light.svg" alt="Icon" style="width: 23px; height: 23px;">
                             <div class="iconTip">Mail</div>
                         </a><a class="iconItem" @click="pop('/images/wxzsm.jpg')" href="javascript:void(0)">
@@ -304,12 +305,14 @@
                 }
 
                 changeTheme(themeState);
-
-            
             });
 
         },
         methods : {
+            goToAbout() {
+                // this.$emit('changePage', 'NotFound');  // 触发事件来切换页面
+                this.$router.push({ name: 'NotFound' });
+            },
             toggleClass(selector, className) {
                 var elements = document.querySelectorAll(selector);
                 elements.forEach(function (element) {

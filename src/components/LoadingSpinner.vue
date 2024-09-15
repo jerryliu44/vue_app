@@ -1,34 +1,20 @@
 <template>
-    <div v-if="isLoading" id="loading">
-      <div id="loading-center"></div>
-    </div>
+  <div v-if="isLoading" id="loading">
+    <div id="loading-center"></div>
+  </div>
 </template>
-  
+
 <script>
+import { mapState } from 'vuex';
+
 export default {
-  data() {
-    return {
-      isLoading: true,
-    };
-  },
-  mounted() {
-    // 当页面加载完成后，设置动画消失
-    window.addEventListener('load', this.hideLoading);
-  },
-  beforeDestroy() {
-    // 清理事件监听
-    window.removeEventListener('load', this.hideLoading);
-  },
-  methods: {
-    hideLoading() {
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 100);
-    }
+  computed: {
+    ...mapState(['isLoading'])
   }
 };
 </script>
-  
+
+
 <style scoped>
 /* 加载界面圆点动画 */
 #loading {

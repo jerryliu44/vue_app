@@ -11,7 +11,7 @@ import store from './store';
 Vue.config.productionTip = false;
 
 new Vue({
+  store, // 将 store 注入到 Vue 实例中
   render: h => h(App),
   router,
-  store,
 }).$mount('#app');
