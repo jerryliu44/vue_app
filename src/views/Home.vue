@@ -55,18 +55,18 @@
 
                     <div class="iconContainer">
                         <!--图标网站 https://yesicon.app/ -->
-                        <a class="iconItem" onclick="" href="https://github.com/liuyh68666">
+                        <a class="iconItem" onclick="" href="https://github.com/jerryliu44">
                             <img src="/images/Github_light.svg" alt="Icon" style="width: 25px; height: 25px;">
                             <div class="iconTip">Github</div>
                         </a>
-                        <a class="iconItem" @click="goToAbout" href="javascript:void(0)">
+                        <a class="iconItem" onclick="" href="mailto:13715358575@163.com">
                             <img src="/images/Mail_light.svg" alt="Icon" style="width: 23px; height: 23px;">
                             <div class="iconTip">Mail</div>
-                        </a><a class="iconItem" @click="pop('/images/wxzsm.jpg')" href="javascript:void(0)">
+                        </a><a class="iconItem" @click="pop('/images/wx.jpg')" href="javascript:void(0)">
                             <img src="/images/Wechat_light.svg" alt="Icon" style="width: 25px; height: 25px;">
                             <div class="iconTip">WX</div>
                         </a>
-                        <a class="iconItem" @click="pop('/images/qq.jpg')" href="javascript:void(0)">
+                        <a class="iconItem" @click="goToAbout" href="javascript:void(0)">
                             <img src="/images/UpFilled_light.svg" alt="Icon" style="width: 20px; height: 20px;">
                             <div class="iconTip">Like</div>
                         </a>
@@ -182,8 +182,8 @@
         </div>
         <footer>
             liuyh68 © 2024 |
-            <a href="https://beian.miit.gov.cn/">
-                豫ICP备2023015852号-1 </a>
+            <a href="liuyh.origami.cloudns.be">
+                liuyh.origami.cloudns.be </a>
         </footer>
         <div class="tc">
             <div onclick="" class="tc-main">
