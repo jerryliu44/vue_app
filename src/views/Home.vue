@@ -66,7 +66,7 @@
                             <img src="/images/Wechat_light.svg" alt="Icon" style="width: 25px; height: 25px;">
                             <div class="iconTip">WX</div>
                         </a>
-                        <a class="iconItem" @click="goToAbout" href="javascript:void(0)">
+                        <a class="iconItem" @click="goToNotFound" href="javascript:void(0)">
                             <img src="/images/UpFilled_light.svg" alt="Icon" style="width: 20px; height: 20px;">
                             <div class="iconTip">Like</div>
                         </a>
@@ -92,16 +92,18 @@
                         <img src="/images/site_light.svg" alt="Icon" style="width: 25px; height: 25px; margin-right: 8px;">
                     site </div>
                     <div class="projectList">
-                        <a class="projectItem a" target="_blank" @click.prevent="handleClick">
+                        <!-- <a class="projectItem a" target="_blank" @click.prevent="handleClick"> -->
+                        <a class="projectItem a" @click="goToScriptRepository" href="javascript:void(0)">
                             <div class="projectItemLeft">
-                                <h1>博客</h1>
-                                <p>记录摆烂日常</p>
+                                <h1>ADB Script</h1>
+                                <p>导航</p>
                             </div>
                             <div class="projectItemRight">
                                 <img src="/images/i1.png" alt="">
                             </div>
 
-                        </a><a class="projectItem a" target="_blank" href="https://i.liuyh68.cc">
+                        </a>
+                        <a class="projectItem a" @click="goToScriptRepository" href="javascript:void(0)">
                             <div class="projectItemLeft">
                                 <h1>云盘</h1>
                                 <p>存储收集文件</p>
@@ -111,7 +113,7 @@
                             </div>
 
                         </a>
-                        <a class="projectItem a" target="_blank" href="https://liuyh68.cc">
+                        <a class="projectItem a" target="_blank" @click.prevent="handleClick">
                             <div class="projectItemLeft">
                                 <h1>实验室</h1>
                                 <p>收集有趣html作品</p>
@@ -198,12 +200,16 @@
     import * as Api from '@/api/api';
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
     import BackgroundFilter from '@/components/BackgroundFilter.vue';
+    import { mapState, mapActions } from 'vuex';
     
     export default {
         name: 'MainContent',
         components: {
             LoadingSpinner,
             BackgroundFilter,
+        },
+        computed: {
+            ...mapState(['theme']),  // 映射 Vuex 的 theme 状态到组件的计算属性
         },
         mounted() {
             // 禁用右键菜单
@@ -247,71 +253,19 @@
                     event.stopPropagation();
                 });
             }
-
-            function setCookie(name, value, days) {
-                var expires = "";
-                if (days) {
-                    var date = new Date();
-                    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-                    expires = "; expires=" + date.toUTCString();
-                }
-                document.cookie = name + "=" + value + expires + "; path=/";
-            }
-
-            function getCookie(name) {
-                var nameEQ = name + "=";
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = cookies[i];
-                    while (cookie.charAt(0) == ' ') {
-                        cookie = cookie.substring(1, cookie.length);
-                    }
-                    if (cookie.indexOf(nameEQ) == 0) {
-                        return cookie.substring(nameEQ.length, cookie.length);
-                    }
-                }
-                return null;
-            }
-
-            // 原先主题切换
-            document.addEventListener('DOMContentLoaded', function () {
-                
-                var html = document.querySelector('html');
-                var themeState = getCookie("themeState") || "Light";
-                var tanChiShe = document.getElementById("tanChiShe");
-
-                function changeTheme(theme) {
-                    tanChiShe.src = "/images/snake-" + theme + ".svg";
-
-
-                    html.dataset.theme = theme;
-                    setCookie("themeState", theme, 365);
-                    themeState = theme;
-                }
-
-                var Checkbox = document.getElementById('myonoffswitch')
-                Checkbox.addEventListener('change', function () {
-                    if (themeState == "Dark") {
-                        changeTheme("Light");
-                    } else if (themeState == "Light") {
-                        changeTheme("Dark");
-                    } else {
-                        changeTheme("Dark");
-                    }
-                });
-
-                if (themeState == "Dark") {
-                    Checkbox.checked = false;
-                }
-
-                changeTheme(themeState);
-            });
-
+            // 初始化主题切换
+            this.initializeThemeSwitch();
+        },
+        beforeDestroy() {
+            // 清理监听主题切换
+            this.cleanupThemeSwitch();
         },
         methods : {
-            goToAbout() {
-                // this.$emit('changePage', 'NotFound');  // 触发事件来切换页面
-                this.$router.push({ name: 'NotFound' });
+            goToNotFound() {
+                this.$router.push({ name: 'NotFound' });  // 触发事件来切换页面
+            },
+            goToScriptRepository() {
+                this.$router.push({ name: 'ScriptRepository' });
             },
             toggleClass(selector, className) {
                 var elements = document.querySelectorAll(selector);
@@ -340,7 +294,40 @@
                 } catch (error) {
                     console.error('API request failed:', error);
                 }
-            }
+            },
+            
+            ...mapActions(['updateTheme']),  // 映射 Vuex 的 action 到组件的方法
+            initializeThemeSwitch() {
+                this.$nextTick(() => {
+                    var html = document.querySelector('html');
+                    var themeState = this.theme || 'Light';
+                    var tanChiShe = document.getElementById('tanChiShe');
+
+                    const changeTheme = (theme) => {
+                    tanChiShe.src = `/images/snake-${theme}.svg`;
+                    html.dataset.theme = theme;
+                    this.updateTheme(theme);  // 更新 Vuex 中的主题状态
+                    };
+
+                    const handleThemeChange = () => {
+                    if (this.theme === 'Dark') {
+                        changeTheme('Light');
+                    } else {
+                        changeTheme('Dark');
+                    }
+                    };
+
+                    var Checkbox = document.getElementById('myonoffswitch');
+                    if (Checkbox) {
+                    Checkbox.addEventListener('change', handleThemeChange);
+                    }
+
+                    if (this.theme === 'Dark') {
+                    Checkbox.checked = false;
+                    }
+                    changeTheme(this.theme);
+                });
+            },
         }
 
     };

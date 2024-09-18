@@ -1,17 +1,25 @@
 <template>
-  <div class="error-page">
-    <div class="error-card">
-      <img class="error-img" src="https://cdn-icons-png.flaticon.com/512/2748/2748558.png" alt="404 Image" />
-      <h1>404</h1>
-      <p>Oops! The page you are looking for doesn't exist.</p>
-      <router-link to="/" class="home-button">Go Back to Home</router-link>
+  <div>
+    <LoadingSpinner />
+    <div class="error-page">
+      <div class="error-card">
+        <img class="error-img" src="/images/404.png" alt="404 Image" />
+        <h1>404</h1>
+        <p>Oops! The page you are looking for doesn't exist.</p>
+        <router-link to="/" class="home-button">Go Back to Home</router-link>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
+
 export default {
-  name: 'NotFound'
+  name: 'NotFound',
+  components: {
+    LoadingSpinner,
+  },
 }
 </script>
 
