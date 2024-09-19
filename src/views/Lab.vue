@@ -1,26 +1,19 @@
 <template>
 <div class="Laboratory-page">
-
-  <el-container class="">
-    <el-header></el-header>
-    <el-container>
-      <el-aside>
-      </el-aside>
-      <el-main>
-        <el-card class="box-card">
-            <span>卡片名称</span>
-        </el-card>
-      </el-main>
-    </el-container>
-  </el-container>
+  <div class="liuyh68-main"></div>
 
 </div>
 </template>
 
 <script>
+// import CardList from '@/components/CardList.vue';
+
 export default {
   name: 'Laboratory',
-};
+  // components: {
+  //   CardList,
+  // },
+}
 </script>
 
 <style scoped>
@@ -34,20 +27,14 @@ export default {
   background-color: var(--back_filter_color); 
 }
 
-.el-container {
-  height: 100vh;
-}
-.el-header{
-  background-color: rgb(34, 34, 31);
-  min-height: 100px;
-}
-.el-aside {
-  width: 20%;
-  background-color: rgb(238, 241, 246);
-}
-
-.box-card {
-  width: 480px;
+.liuyh68-main {
+    width: 100%;
+    margin: 0 auto;
+    transition: transform 0.5s ease;
+    max-width: 1150px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
 }
 
 </style>

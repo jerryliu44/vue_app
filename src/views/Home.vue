@@ -256,10 +256,6 @@
             // 初始化主题切换
             this.initializeThemeSwitch();
         },
-        beforeDestroy() {
-            // 清理监听主题切换
-            this.cleanupThemeSwitch();
-        },
         methods : {
             goToNotFound() {
                 this.$router.push({ name: 'NotFound' });  // 触发事件来切换页面
