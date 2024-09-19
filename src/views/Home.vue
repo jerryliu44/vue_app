@@ -113,7 +113,7 @@
                             </div>
 
                         </a>
-                        <a class="projectItem a" target="_blank" @click.prevent="handleClick">
+                        <a class="projectItem a" @click="goToLaboratory" href="javascript:void(0)">
                             <div class="projectItemLeft">
                                 <h1>实验室</h1>
                                 <p>收集有趣html作品</p>
@@ -263,6 +263,9 @@
         methods : {
             goToNotFound() {
                 this.$router.push({ name: 'NotFound' });  // 触发事件来切换页面
+            },
+            goToLaboratory() {
+                this.$router.push({ name: 'Laboratory' });
             },
             goToScriptRepository() {
                 this.$router.push({ name: 'ScriptRepository' });

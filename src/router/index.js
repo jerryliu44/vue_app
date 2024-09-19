@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from '../views/Home.vue';
-import NotFound from '../views/404.vue'; // 404 页面组件
+import NotFound from '../views/404.vue';
+import Laboratory from '../views/Lab.vue';
 import ScriptRepository from '../views/ScriptRepository.vue';
 import store from '@/store'; // 引入 Vuex store
 
@@ -22,6 +23,11 @@ const router = new Router({
       path: '/scripts',
       name: 'ScriptRepository',
       component: ScriptRepository
+    },
+    {
+      path: '/lab',
+      name: 'Laboratory',
+      component: Laboratory
     },
     {
       path: '*', // 捕捉所有未匹配的路径

@@ -11,7 +11,7 @@ import { Button } from 'element-ui';
 export default {
   name: 'ScriptRepository',
   components: {
-    'el-button': Button, // 注册 Button 组件
+    'el-button': Button,
   },
 };
 </script>
@@ -22,8 +22,8 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    backdrop-filter: blur(19px);
-    -webkit-backdrop-filter: blur(19px); /* 兼容 Safari */
-    background-color: rgba(0, 0, 0, 0.3); /* 半透明黑色背景 */
+    backdrop-filter: blur(var(--back_filter)); 
+    -webkit-backdrop-filter: blur(var(--back_filter)); 
+    background-color: var(--back_filter_color); 
 }
 </style>

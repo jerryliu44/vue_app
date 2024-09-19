@@ -7,6 +7,8 @@ import store from './store';
 // 引入全局样式文件
 // import '../src/assets/css/style.css';
 // import '../src/assets/css/root.css';
+import './common/element-ui'; 
+
 
 Vue.config.productionTip = false;
 
