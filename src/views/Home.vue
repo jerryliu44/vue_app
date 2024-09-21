@@ -99,7 +99,7 @@
                                 <p>导航</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i1.png" alt="">
+                                <img src="/images/foodIcon/面包.png" alt="">
                             </div>
 
                         </a>
@@ -109,7 +109,7 @@
                                 <p>存储收集文件</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i2.png" alt="">
+                                <img src="/images/foodIcon/牛油果.png" alt="">
                             </div>
 
                         </a>
@@ -119,7 +119,7 @@
                                 <p>收集有趣html作品</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i4.png" alt="">
+                                <img src="/images/foodIcon/披萨.png" alt="">
                             </div>
 
                         </a><a class="projectItem a" target="_blank" href="https://liuyh68.cc">
@@ -128,7 +128,7 @@
                                 <p>收集有趣html作品</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i4.png" alt="">
+                                <img src="/images/foodIcon/甜甜圈.png" alt="">
                             </div>
 
                         </a></div>
@@ -141,7 +141,7 @@
                                 <p>记录摆烂日常</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i1.png" alt="">
+                                <img src="/images/foodIcon/饼干.png" alt="">
                             </div>
                         </a><a class="projectItem b" target="_blank" href="https://i.liuyh68.cc">
                             <div class="projectItemLeft">
@@ -149,7 +149,7 @@
                                 <p>存储收集文件</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i2.png" alt="">
+                                <img src="/images/foodIcon/布丁.png" alt="">
                             </div>
                         </a>
                         <a class="projectItem b" target="_blank" href="https://liuyh68.cc">
@@ -158,7 +158,7 @@
                                 <p>收集有趣html作品</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i4.png" alt="">
+                                <img src="/images/foodIcon/草莓.png" alt="">
                             </div>
 
                         </a><a class="projectItem b" target="_blank" href="https://liuyh68.cc">
@@ -167,7 +167,7 @@
                                 <p>收集有趣html作品</p>
                             </div>
                             <div class="projectItemRight">
-                                <img src="/images/i4.png" alt="">
+                                <img src="/images/foodIcon/寿司.png" alt="">
                             </div>
                         </a></div>
                 
