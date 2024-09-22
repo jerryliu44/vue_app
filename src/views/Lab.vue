@@ -3,18 +3,19 @@
     <div class="main-container">
       <div class="left-container">
         <div class="left-navigation">
+          <div class="left-name">ADB</div>
           <transition-group name="slide" tag="ul" id="left-navigation-scroll">
-            <li v-for="(item, index) in items" :key="item.title" 
+            <li v-for="(navItems, index) in navItems" :key="navItems.title" 
                 :class="{ active: currentIndex === index }"
                 @click="selectItem(index)">
               <div class="navigation-item">
-                <span class="nav-text">{{ item.title }}</span>
-                <img class="nav-image" :src="item.image" alt="图标">
+                <span class="nav-text">{{ navItems.title }}</span>
+                <img v-if="navItems.image" class="nav-image" :src="navItems.image" alt="图标">
               </div>
               <transition name="fade">
                 <div v-if="expandedIndexes.includes(index)" class="dropdown-content">
                   <ul>
-                    <li v-for="(subItem, subIndex) in item.subItems" :key="subIndex"
+                    <li v-for="(subItem, subIndex) in navItems.subItems" :key="subIndex"
                         @click="navigateTo(subItem.route)">
                       {{ subItem.title }}
                     </li>
@@ -37,23 +38,40 @@
               @keydown.enter="handleSearch" 
             />
           </div>
+          
           <div class="right-title">
             <h1>发现</h1>
           </div>
           <div class="right-title">
             <h2>最多阅读</h2>
           </div>
+
           <div class="projectBox">
-            <div class="projectItem" v-for="item in items" :key="item.title">
+            <div class="projectItem" v-for="item in contentItems" :key="item.title">
+              <div class="projectItem-header">
+                <img class="projectItem-image" :src="item.image" :alt="item.title" />
+              </div>
+              <div class="projectItem-body">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.content || '暂无描述' }}</p>
+              </div>
+            </div>
             
+            <div class="projectItem placeholder" v-for="n in placeholders" :key="'placeholder-' + n">
+              <div class="projectItem-header"></div>
+              <div class="projectItem-body">
+                <h3>加载中...</h3>
+                <p>请稍候</p>
+              </div>
+            </div>
           </div>
+
         </div>
-        </div>
-        
       </div>
+        
+    </div>
       
       <router-view></router-view>
-    </div>
   </div>
 </template>
 
@@ -65,7 +83,8 @@ export default {
       currentIndex: null, // 默认选中项索引
       expandedIndexes: [], // 保存所有展开的下拉框索引
       searchQuery: '', // 搜索框中的输入值
-      items: [
+      // 导航栏内容
+      navItems: [
         { title: '发现', content: '', subItems: [], image: '/images/搜索.png' },
         { 
           title: '仓库', 
@@ -76,9 +95,17 @@ export default {
           ], 
           image: '/images/文件.png'
         },
-        { title: '敬请期待', content: '', subItems: [], image: '/images/coming-soon-icon.png' },
-        { title: '发现', content: '', subItems: [], image: '/images/搜索.png' },
-      ]
+        { title: '敬请期待', content: '', subItems: []},
+      ],
+      // 右侧内容栏内容
+      contentItems: [
+        { title: '项目1', content: '项目描述1', image: '/images/wx.jpg' },
+        { title: '项目2', content: '项目描述2', image: '/images/logo.jpg' },
+        { title: '项目3', content: '项目描述3', image: '/images/background.jpg' },
+        // 添加更多项目...
+      ],
+      // 占位符
+      placeholders: 6, // 假设有6个占位符
     };
   },
   methods: {
@@ -89,7 +116,7 @@ export default {
     },
     selectItem(index) {
       this.currentIndex = index; // 更新 currentIndex
-      const hasContent = this.items[index].content;
+      const hasContent = this.navItems[index].content;
       const isExpanded = this.expandedIndexes.includes(index);
 
       if (hasContent) { // 如果是下拉框标签
@@ -157,12 +184,10 @@ export default {
   display: none;
 }
 
-
 .left-navigation {
   flex-shrink: 0;
   width: 100%; 
-  height: flex;
-  min-height: 800px;
+  height: 800px;
   border-radius: 15px 0 0 15px; 
   margin-top: 100px; 
   padding: 10px;
@@ -176,10 +201,51 @@ export default {
   
 }
 
+/* 主题应用名称 */
+.left-name {
+  font-size: 48px; 
+  font-weight: bold; 
+  margin-top: 25px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200%;
+  background-position: 0%;
+  font-family: "title";
+  animation: backgroundSizeAnimation 10s ease-in-out infinite;
+  background-image: linear-gradient(
+  120deg,
+  #0051ff 0%,
+  #66bfff 20%,      
+  #009b2c 40%,     
+  #ffcc00 55%,      
+  #ffb300 70%,      
+  #9900cc 80%,     
+  #ff4c4c 90%,      
+  #9900cc 100%      
+);
+}
+
+@font-face {
+    font-family: "title";
+    src: url(../assets/fonts/DripOctober-vm0JA.ttf);
+    font-display: swap;
+}
+
+@keyframes backgroundSizeAnimation {
+    0% {background-position: 100%;}
+    25% {background-position: 50%;}
+    50% {background-position: 0%;}
+    75% {background-position: 50%;}
+    100% {background-position: 100%;}
+}
+
+
 /* 左侧滚动栏属性 */
 #left-navigation-scroll {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 100px); /* 减去left-name高度 */
   font-size: 17px;
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
@@ -192,8 +258,8 @@ export default {
 #left-navigation-scroll li {
   list-style: none;
   position: relative;
-  padding: 10px 0px 10px 10px;
   margin: 10px 0; 
+  padding-left: 5px;
   border-radius: 13px; /* 统一圆角 */
   scroll-snap-align: end;
   color: var(--main_text_color);
@@ -203,11 +269,12 @@ export default {
 #left-navigation-scroll li.active {
   background-color: rgba(0, 0, 0, 0.2); /* 选中时背景颜色 */
   color: #fff; /* 选中时字体颜色 */
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 
 #left-navigation-scroll li:hover {
   background-color: rgba(0, 0, 0, 0.1); /* 悬停时背景颜色 */
+  transform: scale(1.05);
 }
 
 #left-navigation-scroll li .navigation-item {
@@ -251,9 +318,12 @@ export default {
 
 .dropdown-content {
   font-size: 17px;
-  margin-top: 10px;
+  margin-left: 20px;
   padding: 10px;
   border-radius: 8px;
+}
+.dropdown-content li {
+  padding: 10px;
 }
 
 /* 定义 slide 过渡动画 */
@@ -289,8 +359,7 @@ export default {
 
 .right-sub-container {
   flex-shrink: 0;
-  height: flex;
-  min-height: 800px;
+  height: 800px;
   border-radius: 0 15px 15px 0; 
   margin-top: 100px;
   margin-right: 15px;
@@ -302,6 +371,7 @@ export default {
   -webkit-backdrop-filter: blur(100px);
   background: rgba(33, 37, 41, 0.75);
   z-index: 1000;
+  overflow: hidden;
 }
 
 .right-search {
@@ -369,18 +439,29 @@ export default {
 .projectBox {
   display: flex;
   flex-wrap: wrap;
+  margin-bottom: 10px;
+  max-height: 450px;
+  padding: 10px;
   gap: 20px; /* 增大卡片间距 */
+  border-radius: 12px;
   justify-content: flex-start; /* 让卡片从左向右排列，不居中 */
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+}
+
+.projectBox::-webkit-scrollbar {
+  display: none;
 }
 
 .projectItem {
-  flex-basis: calc(25% - 20px); /* 使用flex-basis，确保每行最多4个卡片 */
+  flex-basis: calc(33.33% - 20px); /* 使用flex-basis，确保每行最多4个卡片 */
   margin: 0;
   display: flex;
   background-color: var(--item_bg_color);
   border-radius: 12px;
+  margin-bottom: 10px;
   padding: 20px;
-  height: 120px;
+  height: 200px;
   backdrop-filter: blur(var(--card_filter));
   -webkit-backdrop-filter: blur(var(--card_filter));
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -402,7 +483,24 @@ export default {
   background-color: var(--item_hover_color);
 }
 
+.projectItem-header {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  border-radius: 8px;
+}
 
+.projectItem-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.placeholder {
+  backdrop-filter: blur(var(--card_filter));
+  -webkit-backdrop-filter: blur(var(--card_filter));
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 
 
