@@ -2,6 +2,7 @@
   <div class="Laboratory-page">
     <div class="main-container">
       <div class="left-container">
+        <!-- 左边导航栏保持不变 -->
         <div class="left-navigation">
           <div class="left-name">ADB</div>
           <transition-group name="slide" tag="ul" id="left-navigation-scroll">
@@ -9,8 +10,8 @@
                 :class="{ active: currentIndex === index }"
                 @click="selectItem(index)">
               <div class="navigation-item">
-                <span class="nav-text">{{ navItems.title }}</span>
                 <img v-if="navItems.image" class="nav-image" :src="navItems.image" alt="图标">
+                <span class="nav-text">{{ navItems.title }}</span>
               </div>
               <transition name="fade">
                 <div v-if="expandedIndexes.includes(index)" class="dropdown-content">
@@ -26,10 +27,12 @@
           </transition-group>
         </div>
       </div>
+
       <div class="right-container">
-        <div class="right-sub-container">
+        <!-- 如果没有选择项目，显示项目列表 -->
+        <div v-if="!selectedProject" class="right-sub-container">
           <div class="right-search">
-            <i class="search-icon">🔍</i> <!-- 搜索图标 -->
+            <img class="search-icon" src="/images/搜索.png" alt="搜索图标" />
             <input 
               type="text" 
               class="search-input" 
@@ -47,7 +50,8 @@
           </div>
 
           <div class="projectBox">
-            <div class="projectItem" v-for="item in contentItems" :key="item.title">
+            <!-- 项目列表 -->
+            <div class="projectItem" v-for="item in contentItems" :key="item.title" @click="showProjectDetails(item)">
               <div class="projectItem-header">
                 <img class="projectItem-image" :src="item.image" :alt="item.title" />
               </div>
@@ -67,11 +71,20 @@
           </div>
 
         </div>
-      </div>
         
+        <!-- 如果选择了项目，显示项目详情 -->
+        <div v-else class="project-details-container">
+          <div class="project-details-box">
+            <button class="back-img" @click="goBack">
+              <img class="arrow-icon" src="/images/返回.png" alt="返回" />
+            </button>
+            <h1>README.md</h1>
+            <div class="readme-content" v-html="selectedProject.content"></div>
+            <!-- 项目详细信息 -->
+          </div>
+        </div>
+      </div>
     </div>
-      
-      <router-view></router-view>
   </div>
 </template>
 
@@ -83,9 +96,10 @@ export default {
       currentIndex: null, // 默认选中项索引
       expandedIndexes: [], // 保存所有展开的下拉框索引
       searchQuery: '', // 搜索框中的输入值
+      selectedProject: null,  // 存储被点击的项目
       // 导航栏内容
       navItems: [
-        { title: '发现', content: '', subItems: [], image: '/images/搜索.png' },
+        { title: '发现', content: '', subItems: [], image: '/images/发现.png' },
         { 
           title: '仓库', 
           content: '仓库', 
@@ -93,7 +107,7 @@ export default {
             { title: '详情1', route: '/domain-detail1' },
             { title: '详情2', route: '/domain-detail2' }
           ], 
-          image: '/images/文件.png'
+          image: '/images/仓库.png'
         },
         { title: '敬请期待', content: '', subItems: []},
       ],
@@ -139,7 +153,15 @@ export default {
     },
     navigateTo(route) {
       this.$router.push(route);
-    }
+    },
+    // 点击项目时调用的方法
+    showProjectDetails(item) {
+      this.selectedProject = item;
+    },
+    // 返回项目列表的方法
+    goBack() {
+      this.selectedProject = null;
+    },
   }
 };
 </script>
@@ -150,7 +172,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   backdrop-filter: blur(var(--back_filter)); 
   -webkit-backdrop-filter: blur(var(--back_filter)); 
   background-color: var(--back_filter_color); 
@@ -170,12 +192,9 @@ export default {
 .left-container {
   overflow-y: scroll;
   width: 230px;
-  height: 100vh;
+  height: 100%;
   display: flex;
   padding: 0 15px;
-  position: sticky;
-  top: 0;
-  left: 0;
   align-items: center;
   flex-direction: column;
 }
@@ -189,11 +208,8 @@ export default {
   width: 100%; 
   height: 800px;
   border-radius: 15px 0 0 15px; 
-  margin-top: 100px; 
+  margin-top: 50px; 
   padding: 10px;
-  /* backdrop-filter: blur(var(--card_filter));
-  -webkit-backdrop-filter: blur(var(--card_filter));
-  background: var(--item_bg_color); */
   backdrop-filter: blur(100px);
   -webkit-backdrop-filter: blur(100px);
   background: rgba(33, 37, 41, 0.75);
@@ -268,8 +284,8 @@ export default {
 
 #left-navigation-scroll li.active {
   background-color: rgba(0, 0, 0, 0.2); /* 选中时背景颜色 */
-  color: #fff; /* 选中时字体颜色 */
-  /* font-size: 20px; */
+  color: #fff; 
+  transform: scale(1.05);
 }
 
 #left-navigation-scroll li:hover {
@@ -282,19 +298,19 @@ export default {
   align-items: center;
   justify-content: space-between;
   padding: 15px; /* 内边距 */
-  transition: all 0.3s ease; /* 添加过渡动画 */
+  transition: all 0.3s ease; 
 }
 
 #left-navigation-scroll li .nav-text {
   flex: 1;
   margin-right: 15px; /* 文字和图标之间的间距 */
-  transition: font-size 0.3s ease; /* 文字大小过渡 */
+  transition: font-size 0.3s ease;
 }
 
 #left-navigation-scroll li .nav-image {
   width: 30px; /* 图片宽度 */
   height: 30px; /* 图片高度 */
-  margin-right: 3px; /* 增加右外边距 */
+  margin-right: 20px; /* 增加右外边距 */
   transition: transform 0.3s ease; /* 图片大小过渡 */
 }
 
@@ -351,6 +367,7 @@ export default {
 
 .right-container {
   width: calc(100% - 230px);
+  height: 100%;
   display: flex;
   position: relative;
   padding-bottom: 50px;
@@ -361,7 +378,7 @@ export default {
   flex-shrink: 0;
   height: 800px;
   border-radius: 0 15px 15px 0; 
-  margin-top: 100px;
+  margin-top: 50px;
   margin-right: 15px;
   padding: 10px 50px;
   /* align-items: flex-start; */
@@ -388,9 +405,10 @@ export default {
 }
 
 .search-icon {
-  color: #fff;
-  font-size: 18px;
-  margin-right: 10px;
+  width: 30px; /* 设置图片宽度，原来字体图标是 18px */
+  height: 30px; /* 设置图片高度，确保图片不变形 */
+  margin-right: 10px; /* 保持与文本的间距 */
+  vertical-align: middle; /* 确保图标和文字对齐 */
 }
 
 .search-input {
@@ -502,6 +520,75 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+
+/*项目界面*/
+.project-details-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  
+  flex-shrink: 0;
+  height: 800px;
+  border-radius: 0 15px 15px 0; 
+  margin-top: 50px;
+  margin-right: 15px;
+  padding: 30px 50px;
+  backdrop-filter: blur(100px);
+  -webkit-backdrop-filter: blur(100px);
+  background: rgba(33, 37, 41, 0.75);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.project-details-box {
+  display: flex;
+  flex-direction: column; /* 垂直方向排列 */
+  width: 100%;
+  height: 100%; 
+  font-size: 17px;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+}
+
+.project-details-box::-webkit-scrollbar {
+  display: none;
+}
+
+
+.project-details-box h1{
+  font-size: 24px; 
+  color: #ffffff; 
+  margin-bottom: 20px; 
+  text-align: left; 
+  font-weight: bold; 
+}
+
+.readme-content{
+  white-space: pre-wrap; /* 保留换行 */
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* 返回 */
+.back-img {
+  width: 40px; /* 设置按钮大小 */
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background: rgba(33, 37, 41, 0);
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.arrow-icon {
+  width: 40px; /* 设置图标大小 */
+  height: 40px; /* 自适应高度 */
+}
 
 
 @media (max-width: 1200px) {
