@@ -1,10 +1,15 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '../views/Home.vue';
-import NotFound from '../views/404.vue';
-import Laboratory from '../views/Lab.vue';
-import ScriptRepository from '../views/ScriptRepository.vue';
 import store from '@/store'; // 引入 Vuex store
+
+
+// 直接加载
+import Home from '../views/Home.vue';
+
+// 按需加载
+const NotFound = () => import('../views/404.vue');
+const Laboratory = () => import('../views/Lab.vue');
+const ScriptRepository = () => import('../views/ScriptRepository.vue');
 
 Vue.use(Router);
 
@@ -14,10 +19,6 @@ const router = new Router({
     {
       path: '/',
       component: Home
-    },
-    {
-      path: '/About',
-      component: () => import('../views/About.vue')
     },
     {
       path: '/scripts',

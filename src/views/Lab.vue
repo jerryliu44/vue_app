@@ -89,6 +89,9 @@
 </template>
 
 <script>
+import { get_adbScripts_list } from '@/api/api';
+
+
 export default {
   name: 'Laboratory',
   data() {
@@ -112,15 +115,19 @@ export default {
         { title: '敬请期待', content: '', subItems: []},
       ],
       // 右侧内容栏内容
-      contentItems: [
-        { title: '项目1', content: '项目描述1', image: '/images/wx.jpg' },
-        { title: '项目2', content: '项目描述2', image: '/images/logo.jpg' },
-        { title: '项目3', content: '项目描述3', image: '/images/background.jpg' },
-        // 添加更多项目...
-      ],
+      // contentItems: [
+      //   { title: '项目1', content: '项目描述1', image: '/images/wx.jpg' },
+      //   { title: '项目2', content: '项目描述2', image: '/images/logo.jpg' },
+      //   { title: '项目3', content: '项目描述3', image: '/images/background.jpg' },
+      //   // 添加更多项目...
+      // ],
+      contentItems: [],
       // 占位符
       placeholders: 6, // 假设有6个占位符
     };
+  },
+  mounted() {
+    this.fetchContentItems();
   },
   methods: {
     handleSearch() {
@@ -162,6 +169,21 @@ export default {
     goBack() {
       this.selectedProject = null;
     },
+    
+    // api获取项目列表
+    async fetchContentItems() {
+      try {
+        const response = await get_adbScripts_list();
+        // 将获取的数据赋值给 contentItems
+        this.contentItems = response.map(item => ({
+          title: item.title,
+          content: item.content,
+          image: item.img_path // 根据实际需求调整
+        }));
+      } catch (error) {
+        console.error('获取项目列表失败:', error);
+      }
+    }
   }
 };
 </script>
