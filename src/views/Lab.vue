@@ -397,6 +397,7 @@ export default {
 }
 
 .right-sub-container {
+  min-width: 250px;
   flex-shrink: 0;
   height: 800px;
   border-radius: 0 15px 15px 0; 
@@ -434,7 +435,7 @@ export default {
 }
 
 .search-input {
-  flex-grow: 1;
+  width: 100%;
   padding: 10px;
   border: none;
   border-radius: 25px;
@@ -443,7 +444,6 @@ export default {
   color: #fff;
   font-size: 16px;
   transition: background-color 0.3s;
-  
 }
 
 .search-input::placeholder {
@@ -481,7 +481,6 @@ export default {
   flex-wrap: wrap;
   margin-bottom: 10px;
   max-height: 450px;
-  padding: 10px;
   gap: 20px; /* 增大卡片间距 */
   border-radius: 12px;
   justify-content: flex-start; /* 让卡片从左向右排列，不居中 */
@@ -494,7 +493,7 @@ export default {
 }
 
 .projectItem {
-  flex-basis: calc(33.33% - 20px); /* 使用flex-basis，确保每行最多4个卡片 */
+  flex-basis: calc(33.33% - 20px); /* 使用flex-basis，确保每行最多3个卡片 */
   margin: 0;
   display: flex;
   background-color: var(--item_bg_color);
@@ -615,19 +614,29 @@ export default {
 
 @media (max-width: 1200px) {
   .projectItem {
-    width: calc(33.33% - 20px); /* 适应更小的屏幕 */
+    flex-basis: calc(50% - 20px);
+    width: 50% - 20px; 
   }
 }
 
 @media (max-width: 768px) {
   .projectItem {
-    width: calc(50% - 20px); /* 平板或较小屏幕适配 */
+    flex-basis: 100%; 
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .projectItem {
-    width: calc(100% - 20px); /* 手机屏幕适配，单列显示 */
+    flex-basis: 100%; 
+    width: 100%;
+  }
+  .left-container {
+    width: 170px;
+  }
+  .right-sub-container {
+    width: 280px;
   }
 }
+
 </style>
