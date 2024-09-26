@@ -79,6 +79,9 @@
               <img class="arrow-icon" src="/images/返回.png" alt="返回" />
             </button>
             <h1>README.md</h1>
+            <div>
+                <MarkdownPreview :markdownText="markdownContent" />
+            </div>
             <div class="readme-content" v-html="selectedProject.content"></div>
             <!-- 项目详细信息 -->
           </div>
@@ -90,16 +93,21 @@
 
 <script>
 import { get_adbScripts_list } from '@/api/api';
+import MarkdownPreview from '../components/MarkdownPreview.vue';
 
 
 export default {
   name: 'Laboratory',
+  components: {
+    MarkdownPreview,
+  },
   data() {
     return {
       currentIndex: null, // 默认选中项索引
       expandedIndexes: [], // 保存所有展开的下拉框索引
       searchQuery: '', // 搜索框中的输入值
       selectedProject: null,  // 存储被点击的项目
+      markdownContent: '',
       // 导航栏内容
       navItems: [
         { title: '发现', content: '', subItems: [], image: '/images/发现.png' },
@@ -115,12 +123,6 @@ export default {
         { title: '敬请期待', content: '', subItems: []},
       ],
       // 右侧内容栏内容
-      // contentItems: [
-      //   { title: '项目1', content: '项目描述1', image: '/images/wx.jpg' },
-      //   { title: '项目2', content: '项目描述2', image: '/images/logo.jpg' },
-      //   { title: '项目3', content: '项目描述3', image: '/images/background.jpg' },
-      //   // 添加更多项目...
-      // ],
       contentItems: [],
       // 占位符
       placeholders: 6, // 假设有6个占位符
