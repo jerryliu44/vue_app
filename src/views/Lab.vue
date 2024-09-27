@@ -51,13 +51,14 @@
 
           <div class="projectBox">
             <!-- 项目列表 -->
-            <div class="projectItem" v-for="item in contentItems" :key="item.title" @click="showProjectDetails(item)">
+            <div class="projectItem" v-for="(item, index) in contentItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
               <div class="projectItem-header">
                 <img class="projectItem-image" :src="item.image" :alt="item.title" />
               </div>
               <div class="projectItem-body">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.content || '暂无描述' }}</p>
+                <div class="scroll-container" :style="{ transform: item.scrollTransform }">
+                  <h3>{{ item.title }}</h3>
+                </div>
               </div>
             </div>
             
@@ -108,6 +109,8 @@ export default {
       searchQuery: '', // 搜索框中的输入值
       selectedProject: null,  // 存储被点击的项目
       markdownContent: '',
+
+      
       // 导航栏内容
       navItems: [
         { title: '发现', content: '', subItems: [], image: '/images/发现.png' },
@@ -180,11 +183,48 @@ export default {
         this.contentItems = response.map(item => ({
           title: item.title,
           content: item.content,
-          image: item.img_path // 根据实际需求调整
+          image: item.img_path, // 根据实际需求调整
+          
+          // 项目标题是否正在滚动
+          isScrolling: false,
+          scrollTransform: 'translateX(0)',
         }));
       } catch (error) {
         console.error('获取项目列表失败:', error);
       }
+    },
+    
+    // 项目标题滚动效果
+    startScroll(index) {
+      this.contentItems[index].isScrolling = true;
+      this.contentItems[index].scrollTransform = 'translateX(0)';
+      this.animateScroll(index);
+    },
+    stopScroll(index) {
+      this.contentItems[index].isScrolling = false;
+      this.contentItems[index].scrollTransform = 'translateX(0)';
+    },
+    animateScroll(index) {
+      let currentTransform = 0;
+      const duration = 6000; // 动画持续时间 (6秒)
+      const interval = 16; // 每帧间隔时间 (大约每秒60帧)
+
+      const startTime = Date.now();
+
+      const tick = () => {
+        if (!this.contentItems[index].isScrolling) return;
+
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        currentTransform = -100 * progress + '%';
+
+        this.contentItems[index].scrollTransform = `translateX(${currentTransform})`;
+
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        }
+      };
+      requestAnimationFrame(tick);
     }
   }
 };
@@ -531,6 +571,20 @@ export default {
   border-radius: 8px;
 }
 
+.projectItem-body {
+  position: relative;
+  height: 60px;
+  width: 100%;
+  overflow: hidden; /* 隐藏超出部分 */
+}
+
+.scroll-container {
+  white-space: nowrap; /* 防止换行 */
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
 .projectItem-image {
   width: 100%;
   height: 100%;
@@ -586,6 +640,7 @@ export default {
   text-align: left; 
   font-weight: bold; 
 }
+
 
 .readme-content{
   white-space: pre-wrap; /* 保留换行 */
