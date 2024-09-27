@@ -32,8 +32,8 @@ computed: {
     font-family: sans-serif;
     line-height: 1.6;
     padding: 20px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 }
 
 .markdown-preview h1, .markdown-preview h2, .markdown-preview h3, .markdown-preview h4, .markdown-preview h5, .markdown-preview h6 {

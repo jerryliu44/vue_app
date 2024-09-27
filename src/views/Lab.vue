@@ -82,6 +82,7 @@
             <h1>README.md</h1>
             <div><MarkdownPreview :markdownText="selectedProject.content" /></div>
             <!-- 项目详细信息 -->
+            <!-- <FileTree /> -->
           </div>
         </div>
       </div>
@@ -92,6 +93,7 @@
 <script>
 import { get_adbScripts_list } from '@/api/api';
 import MarkdownPreview from '../components/MarkdownPreview.vue';
+import FileTree from '../components/FileTree.vue';
 
 
 export default {
