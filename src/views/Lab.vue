@@ -80,10 +80,7 @@
               <img class="arrow-icon" src="/images/返回.png" alt="返回" />
             </button>
             <h1>README.md</h1>
-            <div>
-                <MarkdownPreview :markdownText="markdownContent" />
-            </div>
-            <div class="readme-content" v-html="selectedProject.content"></div>
+            <div><MarkdownPreview :markdownText="selectedProject.content" /></div>
             <!-- 项目详细信息 -->
           </div>
         </div>
@@ -639,13 +636,6 @@ export default {
   margin-bottom: 20px; 
   text-align: left; 
   font-weight: bold; 
-}
-
-
-.readme-content{
-  white-space: pre-wrap; /* 保留换行 */
-  font-size: 16px;
-  line-height: 1.5;
 }
 
 /* 返回 */
