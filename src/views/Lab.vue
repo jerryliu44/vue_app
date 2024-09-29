@@ -53,11 +53,11 @@
             <!-- 项目列表 -->
             <div class="projectItem" v-for="(item, index) in contentItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
               <div class="projectItem-header">
-                <img class="projectItem-image" :src="`/images/uploads/${item.image}`" :alt="item.title" />
+                <img class="projectItem-image" :src="item.image" :alt="item.title" />
               </div>
               <div class="projectItem-body">
                 <div class="scroll-container" :style="{ transform: item.scrollTransform }">
-                  <h3>{{ item.title }}</h3>
+                  <h3 :ref="`title-${index}`">{{ item.title }}</h3>
                 </div>
               </div>
             </div>
@@ -195,9 +195,13 @@ export default {
     
     // 项目标题滚动效果
     startScroll(index) {
-      this.contentItems[index].isScrolling = true;
-      this.contentItems[index].scrollTransform = 'translateX(0)';
-      this.animateScroll(index);
+      const titleElement = this.$refs[`title-${index}`][0]; // 使用 ref 获取标题元素
+      // 如果长度小于容器宽度，则无需滚动
+      if (titleElement.scrollWidth > titleElement.offsetWidth) {
+        this.contentItems[index].isScrolling = true;
+        this.contentItems[index].scrollTransform = 'translateX(0)';
+        this.animateScroll(index);
+      }
     },
     stopScroll(index) {
       this.contentItems[index].isScrolling = false;
@@ -582,6 +586,7 @@ export default {
   position: absolute;
   height: 100%;
   width: 100%;
+  margin-top: 25px; /*间距*/
 }
 
 .projectItem-image {
