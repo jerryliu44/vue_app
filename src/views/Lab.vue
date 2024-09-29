@@ -53,7 +53,7 @@
             <!-- 项目列表 -->
             <div class="projectItem" v-for="(item, index) in contentItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
               <div class="projectItem-header">
-                <img class="projectItem-image" :src="item.image" :alt="item.title" />
+                <img class="projectItem-image" :src="`/images/uploads/${item.image}`" :alt="item.title" />
               </div>
               <div class="projectItem-body">
                 <div class="scroll-container" :style="{ transform: item.scrollTransform }">
