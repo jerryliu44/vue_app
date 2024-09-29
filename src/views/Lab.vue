@@ -79,7 +79,11 @@
             <button class="back-img" @click="goBack">
               <img class="arrow-icon" src="/images/返回.png" alt="返回" />
             </button>
-            <h1>README.md</h1>
+            <div>
+              <h1>README.md</h1>
+              <img class="download-icon" style="float: right;" src="/images/下载.png" alt="Download Icon">
+            </div>
+            
             <div><MarkdownPreview :markdownText="selectedProject.content" /></div>
             <!-- 项目详细信息 -->
             <!-- <FileTree /> -->
@@ -569,7 +573,7 @@ export default {
 
 .projectItem-header {
   width: 100%;
-  height: 120px;
+  height: 140px;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -640,7 +644,6 @@ export default {
 .project-details-box h1{
   font-size: 24px; 
   color: #ffffff; 
-  margin-bottom: 20px; 
   text-align: left; 
   font-weight: bold; 
 }
@@ -663,6 +666,11 @@ export default {
 .arrow-icon {
   width: 40px; /* 设置图标大小 */
   height: 40px; /* 自适应高度 */
+}
+
+.download-icon {
+  width: 40px; 
+  height: 40px; 
 }
 
 
