@@ -76,12 +76,13 @@
         <!-- 如果选择了项目，显示项目详情 -->
         <div v-else class="project-details-container">
           <div class="project-details-box">
-            <button class="back-img" @click="goBack">
+            <button class="img_button" @click="goBack">
               <img class="arrow-icon" src="/images/返回.png" alt="返回" />
             </button>
-            <div>
+            <div style="display: flex; align-items: center;">
               <h1>README.md</h1>
-              <img class="download-icon" style="float: right;" src="/images/下载.png" alt="Download Icon">
+              <img class="download-icon" src="/images/下载.png" alt="Download Icon" style="margin-left: auto;">
+              <img class="picture-icon" src="/images/相册.png" alt="Picture Icon" style="margin-left: 10px;">
             </div>
             
             <div><MarkdownPreview :markdownText="selectedProject.content" /></div>
@@ -649,7 +650,7 @@ export default {
 }
 
 /* 返回 */
-.back-img {
+.img_button {
   width: 40px; /* 设置按钮大小 */
   height: 40px;
   border: none;
@@ -673,6 +674,10 @@ export default {
   height: 40px; 
 }
 
+.picture-icon {
+  width: 40px; 
+  height: 40px; 
+}
 
 @media (max-width: 1200px) {
   .projectItem {
