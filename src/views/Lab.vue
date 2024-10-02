@@ -30,7 +30,7 @@
 
       <div class="right-container">
         <!-- 如果没有选择项目，显示项目列表 -->
-        <div v-if="!selectedProject" class="right-sub-container">
+        <div v-if="selectedProject === 'projectlist' " class="right-sub-container">
           <div class="right-search">
             <img class="search-icon" src="/images/搜索.png" alt="搜索图标" />
             <input 
@@ -74,22 +74,30 @@
         </div>
         
         <!-- 如果选择了项目，显示项目详情 -->
-        <div v-else class="project-details-container">
+        <div v-else-if="selectedProject === 'project' " class="project-details-container">
           <div class="project-details-box">
             <button class="img_button" @click="goBack">
               <img class="arrow-icon" src="/images/返回.png" alt="返回" />
             </button>
             <div style="display: flex; align-items: center;">
               <h1>README.md</h1>
-              <img class="download-icon" src="/images/下载.png" alt="Download Icon" style="margin-left: auto;">
-              <img class="picture-icon" src="/images/相册.png" alt="Picture Icon" style="margin-left: 10px;">
+              <button class="img_button" @click="goBack" style="margin-left: auto;">
+                <img class="download-icon" src="/images/下载.png" alt="Download Icon">
+              </button>
+              <button class="img_button" @click="goBack" style="margin-left: 10px;">
+                <img class="picture-icon" src="/images/相册.png" alt="Picture Icon">
+              </button>
+              <!-- <img class="download-icon" src="/images/下载.png" alt="Download Icon" style="margin-left: auto;">
+              <img class="picture-icon" src="/images/相册.png" alt="Picture Icon" style="margin-left: 10px;"> -->
             </div>
             
-            <div><MarkdownPreview :markdownText="selectedProject.content" /></div>
+            <div><MarkdownPreview :markdownText="ProjectDetail.content" /></div>
             <!-- 项目详细信息 -->
             <!-- <FileTree /> -->
           </div>
         </div>
+        <!-- 如果选择展示图片，显示图片 -->
+        <div v-if="selectedProject === 'picture' " class="right-sub-container"></div>
       </div>
     </div>
   </div>
@@ -108,10 +116,11 @@ export default {
   },
   data() {
     return {
-      currentIndex: null, // 默认选中项索引
-      expandedIndexes: [], // 保存所有展开的下拉框索引
-      searchQuery: '', // 搜索框中的输入值
-      selectedProject: null,  // 存储被点击的项目
+      currentIndex: null,                 // 默认选中项索引
+      expandedIndexes: [],                // 保存所有展开的下拉框索引
+      searchQuery: '',                    // 搜索框中的输入值
+      selectedProject: "projectlist",     // 界面选择，初始时为projectlist
+      ProjectDetail: null,                // 存储被点击的项目
       markdownContent: '',
 
       
@@ -172,11 +181,15 @@ export default {
     },
     // 点击项目时调用的方法
     showProjectDetails(item) {
-      this.selectedProject = item;
+      this.selectedProject = "project";
+      this.ProjectDetail = item;
     },
     // 返回项目列表的方法
     goBack() {
-      this.selectedProject = null;
+      this.selectedProject = "projectlist";
+    },
+    showPicture() {
+      this.selectedProject = "picture";
     },
     
     // api获取项目列表
@@ -544,6 +557,7 @@ export default {
 
 .projectItem {
   flex-basis: calc(33.33% - 20px); /* 使用flex-basis，确保每行最多3个卡片 */
+  cursor: pointer;
   margin: 0;
   display: flex;
   background-color: var(--item_bg_color);
@@ -635,6 +649,7 @@ export default {
   font-size: 17px;
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
+  background: rgba(33, 37, 41, 0.75);
 }
 
 .project-details-box::-webkit-scrollbar {
