@@ -53,7 +53,7 @@
             <!-- 项目列表 -->
             <div class="projectItem" v-for="(item, index) in contentItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
               <div class="projectItem-header">
-                <img class="projectItem-image" :src="`/images/uploads/${item.image}`" :alt="item.title" />
+                <img class="projectItem-image" :src="`/images/uploads/ADB/${item.image}`" :alt="item.title" />
               </div>
               <div class="projectItem-body">
                 <div class="scroll-container" :style="{ transform: item.scrollTransform }">
@@ -84,11 +84,9 @@
               <button class="img_button" @click="goBack" style="margin-left: auto;">
                 <img class="download-icon" src="/images/下载.png" alt="Download Icon">
               </button>
-              <button class="img_button" @click="goBack" style="margin-left: 10px;">
+              <button class="img_button" @click="showPicture" style="margin-left: 10px;">
                 <img class="picture-icon" src="/images/相册.png" alt="Picture Icon">
               </button>
-              <!-- <img class="download-icon" src="/images/下载.png" alt="Download Icon" style="margin-left: auto;">
-              <img class="picture-icon" src="/images/相册.png" alt="Picture Icon" style="margin-left: 10px;"> -->
             </div>
             
             <div><MarkdownPreview :markdownText="ProjectDetail.content" /></div>
@@ -97,7 +95,15 @@
           </div>
         </div>
         <!-- 如果选择展示图片，显示图片 -->
-        <div v-if="selectedProject === 'picture' " class="right-sub-container"></div>
+        <div v-if="selectedProject === 'picture' " class="project-details-container">
+          <div class="project-details-box">
+            <button class="img_button" @click="goBack">
+              <img class="arrow-icon" src="/images/返回.png" alt="返回" />
+            </button>
+            <!-- 图片展示框 -->
+            <ImageZoom :imageSrc="`/images/uploads/ADB/${ProjectDetail.image}`" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -105,14 +111,20 @@
 
 <script>
 import { get_adbScripts_list } from '@/api/api';
-import MarkdownPreview from '../components/MarkdownPreview.vue';
-import FileTree from '../components/FileTree.vue';
+// import MarkdownPreview from '../components/MarkdownPreview.vue';
+// import FileTree from '../components/FileTree.vue';
+// import ImageZoom from '../components/ImageZoom.vue';
+// 异步加载组件
+const MarkdownPreview = () => import('../components/MarkdownPreview.vue');
+// const FileTree = () => import('../components/FileTree.vue');
+const ImageZoom = () => import('../components/ImageZoom.vue');
 
 
 export default {
   name: 'Laboratory',
   components: {
     MarkdownPreview,
+    ImageZoom,
   },
   data() {
     return {
@@ -122,7 +134,6 @@ export default {
       selectedProject: "projectlist",     // 界面选择，初始时为projectlist
       ProjectDetail: null,                // 存储被点击的项目
       markdownContent: '',
-
       
       // 导航栏内容
       navItems: [
@@ -649,7 +660,6 @@ export default {
   font-size: 17px;
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
-  background: rgba(33, 37, 41, 0.75);
 }
 
 .project-details-box::-webkit-scrollbar {

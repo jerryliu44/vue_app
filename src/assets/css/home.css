@@ -76,7 +76,8 @@ html[data-theme="Dark"] {
     padding: 0;
     box-sizing: border-box;
     user-select: none;
-    transition: background-color 0.2s ease;
+    /* 因为ADB 项目切换背景闪烁删除 */
+    /* transition: background-color 0.2s ease; */
 }
 
 a:hover,
