@@ -92,6 +92,7 @@
             <div><MarkdownPreview :markdownText="ProjectDetail.content" /></div>
             <!-- 项目详细信息 -->
             <!-- <FileTree /> -->
+            <CodeBlock :code="codeSnippet" />
           </div>
         </div>
         <!-- 如果选择展示图片，显示图片 -->
@@ -114,9 +115,10 @@ import { get_adbScripts_list } from '@/api/api';
 // import MarkdownPreview from '../components/MarkdownPreview.vue';
 // import FileTree from '../components/FileTree.vue';
 // import ImageZoom from '../components/ImageZoom.vue';
+import CodeBlock from '../components/CodeBlock.vue';
+
 // 异步加载组件
 const MarkdownPreview = () => import('../components/MarkdownPreview.vue');
-// const FileTree = () => import('../components/FileTree.vue');
 const ImageZoom = () => import('../components/ImageZoom.vue');
 
 
@@ -125,6 +127,7 @@ export default {
   components: {
     MarkdownPreview,
     ImageZoom,
+    CodeBlock,
   },
   data() {
     return {
@@ -134,7 +137,7 @@ export default {
       selectedProject: "projectlist",     // 界面选择，初始时为projectlist
       ProjectDetail: null,                // 存储被点击的项目
       markdownContent: '',
-      
+      codeSnippet: `console.log("Hello, world!");\nconst a = 5;\nconsole.log(a);`,
       // 导航栏内容
       navItems: [
         { title: '发现', content: '', subItems: [], image: '/images/发现.png' },
