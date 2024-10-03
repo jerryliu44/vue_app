@@ -30,7 +30,7 @@
 
       <div class="right-container">
         <!-- 如果没有选择项目，显示项目列表 -->
-        <div v-if="!selectedProject" class="right-sub-container">
+        <div v-if="selectedProject === 'projectlist' " class="right-sub-container">
           <div class="right-search">
             <img class="search-icon" src="/images/搜索.png" alt="搜索图标" />
             <input 
@@ -53,7 +53,7 @@
             <!-- 项目列表 -->
             <div class="projectItem" v-for="(item, index) in contentItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
               <div class="projectItem-header">
-                <img class="projectItem-image" :src="`/images/uploads/${item.image}`" :alt="item.title" />
+                <img class="projectItem-image" :src="`/images/uploads/ADB/${item.image}`" :alt="item.title" />
               </div>
               <div class="projectItem-body">
                 <div class="scroll-container" :style="{ transform: item.scrollTransform }">
@@ -74,20 +74,34 @@
         </div>
         
         <!-- 如果选择了项目，显示项目详情 -->
-        <div v-else class="project-details-container">
+        <div v-else-if="selectedProject === 'project' " class="project-details-container">
           <div class="project-details-box">
             <button class="img_button" @click="goBack">
               <img class="arrow-icon" src="/images/返回.png" alt="返回" />
             </button>
             <div style="display: flex; align-items: center;">
               <h1>README.md</h1>
-              <img class="download-icon" src="/images/下载.png" alt="Download Icon" style="margin-left: auto;">
-              <img class="picture-icon" src="/images/相册.png" alt="Picture Icon" style="margin-left: 10px;">
+              <button class="img_button" @click="goBack" style="margin-left: auto;">
+                <img class="download-icon" src="/images/下载.png" alt="Download Icon">
+              </button>
+              <button class="img_button" @click="showPicture" style="margin-left: 10px;">
+                <img class="picture-icon" src="/images/相册.png" alt="Picture Icon">
+              </button>
             </div>
             
-            <div><MarkdownPreview :markdownText="selectedProject.content" /></div>
+            <div><MarkdownPreview :markdownText="ProjectDetail.content" /></div>
             <!-- 项目详细信息 -->
             <!-- <FileTree /> -->
+          </div>
+        </div>
+        <!-- 如果选择展示图片，显示图片 -->
+        <div v-if="selectedProject === 'picture' " class="project-details-container">
+          <div class="project-details-box">
+            <button class="img_button" @click="goBack">
+              <img class="arrow-icon" src="/images/返回.png" alt="返回" />
+            </button>
+            <!-- 图片展示框 -->
+            <ImageZoom :imageSrc="`/images/uploads/ADB/${ProjectDetail.image}`" />
           </div>
         </div>
       </div>
@@ -97,23 +111,29 @@
 
 <script>
 import { get_adbScripts_list } from '@/api/api';
-import MarkdownPreview from '../components/MarkdownPreview.vue';
-import FileTree from '../components/FileTree.vue';
+// import MarkdownPreview from '../components/MarkdownPreview.vue';
+// import FileTree from '../components/FileTree.vue';
+// import ImageZoom from '../components/ImageZoom.vue';
+// 异步加载组件
+const MarkdownPreview = () => import('../components/MarkdownPreview.vue');
+// const FileTree = () => import('../components/FileTree.vue');
+const ImageZoom = () => import('../components/ImageZoom.vue');
 
 
 export default {
   name: 'Laboratory',
   components: {
     MarkdownPreview,
+    ImageZoom,
   },
   data() {
     return {
-      currentIndex: null, // 默认选中项索引
-      expandedIndexes: [], // 保存所有展开的下拉框索引
-      searchQuery: '', // 搜索框中的输入值
-      selectedProject: null,  // 存储被点击的项目
+      currentIndex: null,                 // 默认选中项索引
+      expandedIndexes: [],                // 保存所有展开的下拉框索引
+      searchQuery: '',                    // 搜索框中的输入值
+      selectedProject: "projectlist",     // 界面选择，初始时为projectlist
+      ProjectDetail: null,                // 存储被点击的项目
       markdownContent: '',
-
       
       // 导航栏内容
       navItems: [
@@ -172,11 +192,15 @@ export default {
     },
     // 点击项目时调用的方法
     showProjectDetails(item) {
-      this.selectedProject = item;
+      this.selectedProject = "project";
+      this.ProjectDetail = item;
     },
     // 返回项目列表的方法
     goBack() {
-      this.selectedProject = null;
+      this.selectedProject = "projectlist";
+    },
+    showPicture() {
+      this.selectedProject = "picture";
     },
     
     // api获取项目列表
@@ -544,6 +568,7 @@ export default {
 
 .projectItem {
   flex-basis: calc(33.33% - 20px); /* 使用flex-basis，确保每行最多3个卡片 */
+  cursor: pointer;
   margin: 0;
   display: flex;
   background-color: var(--item_bg_color);
