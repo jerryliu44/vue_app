@@ -53,7 +53,7 @@
             <!-- 项目列表 -->
             <div class="projectItem" v-for="(item, index) in contentItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
               <div class="projectItem-header">
-                <img class="projectItem-image" :src="`/images/uploads/ADB/${item.image}`" :alt="item.title" />
+                <img class="projectItem-image" :src="`${PictureBasePath}/${item.image}`" :alt="item.title" />
               </div>
               <div class="projectItem-body">
                 <div class="scroll-container" :style="{ transform: item.scrollTransform }">
@@ -81,26 +81,29 @@
             </button>
             <div style="display: flex; align-items: center;">
               <h1>README.md</h1>
-              <button class="img_button" @click="goBack" style="margin-left: auto;">
-                <img class="download-icon" src="/images/下载.png" alt="Download Icon">
-              </button>
-              <button class="img_button" @click="showPicture" style="margin-left: 10px;">
+              <button class="img_button" @click="showPicture" style="margin-left: auto;">
                 <img class="picture-icon" src="/images/相册.png" alt="Picture Icon">
               </button>
             </div>
             
-            <div><MarkdownPreview :markdownText="ProjectDetail.content" /></div>
+            <div><MarkdownPreview :markdownText="ProjectDetail.title" /></div>
             <!-- 项目详细信息 -->
             <!-- <FileTree /> -->
-            <CodeBlock :code="codeSnippet" />
+            <!-- <CodeBlock :code="codeSnippet" /> -->
+            <CodeBlock :code="this.ProjectDetail.content" language="Python"/>
           </div>
         </div>
         <!-- 如果选择展示图片，显示图片 -->
         <div v-if="selectedProject === 'picture' " class="project-details-container">
           <div class="project-details-box">
-            <button class="img_button" @click="goBack">
-              <img class="arrow-icon" src="/images/返回.png" alt="返回" />
-            </button>
+            <div style="display: flex; align-items: center;">
+              <button class="img_button" @click="goBack">
+                <img class="arrow-icon" src="/images/返回.png" alt="返回" />
+              </button>
+              <button class="img_button" @click="downloadPicture" style="margin-left: 30px;">
+                <img class="download-icon" src="/images/下载.png" alt="下载" />
+              </button>
+            </div>
             <!-- 图片展示框 -->
             <ImageZoom :imageSrc="`/images/uploads/ADB/${ProjectDetail.image}`" />
           </div>
@@ -137,6 +140,7 @@ export default {
       selectedProject: "projectlist",     // 界面选择，初始时为projectlist
       ProjectDetail: null,                // 存储被点击的项目
       markdownContent: '',
+      PictureBasePath: '/images/uploads/ADB',
       codeSnippet: `console.log("Hello, world!");\nconst a = 5;\nconsole.log(a);`,
       // 导航栏内容
       navItems: [
@@ -205,7 +209,13 @@ export default {
     showPicture() {
       this.selectedProject = "picture";
     },
-    
+    downloadPicture() {
+      const imageUrl = `${this.PictureBasePath}/${this.ProjectDetail.image}`;  // 使用反引号定义模板字符串
+      const link = document.createElement('a');
+      link.href = imageUrl;
+      link.download = 'picture.png';  // 设置下载的文件名
+      link.click();  // 触发点击事件，开始下载
+    },
     // api获取项目列表
     async fetchContentItems() {
       try {
