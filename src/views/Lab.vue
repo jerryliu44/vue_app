@@ -86,11 +86,17 @@
               </button>
             </div>
             
-            <div><MarkdownPreview :markdownText="ProjectDetail.title" /></div>
+            <div><MarkdownPreview :markdownText="ProjectDetail.readme" /></div>
             <!-- 项目详细信息 -->
             <!-- <FileTree /> -->
-            <!-- <CodeBlock :code="codeSnippet" /> -->
-            <CodeBlock :code="this.ProjectDetail.content" language="Python"/>
+            <div style="display: flex; flex-direction: column;">
+              <h1>API</h1>
+              <div class="api-block">
+                <div class="api-title">{{ ProjectDetail.API_url }}</div>
+                <div class="api-method">{{ ProjectDetail.API_method }}</div>
+              </div>
+            </div>
+            <CodeBlock :code="ProjectDetail.code" :language="ProjectDetail.code_type" />
           </div>
         </div>
         <!-- 如果选择展示图片，显示图片 -->
@@ -140,8 +146,9 @@ export default {
       selectedProject: "projectlist",     // 界面选择，初始时为projectlist
       ProjectDetail: null,                // 存储被点击的项目
       markdownContent: '',
+      apiMethod:'',                       // 存储ProjectDetail.API_method
       PictureBasePath: '/images/uploads/ADB',
-      codeSnippet: `console.log("Hello, world!");\nconst a = 5;\nconsole.log(a);`,
+
       // 导航栏内容
       navItems: [
         { title: '发现', content: '', subItems: [], image: '/images/发现.png' },
@@ -164,13 +171,43 @@ export default {
   },
   mounted() {
     this.fetchContentItems();
+    // 添加全局点击监听器，如果需要取消全局选中状态
+    document.addEventListener('click', this.onPageClick);
   },
+  beforeDestroy() {
+    // 在组件销毁时移除监听器，防止内存泄漏
+    document.removeEventListener('click', this.onPageClick);
+  },  
   methods: {
     handleSearch() {
       // 当按下 Enter 键时触发的搜索逻辑
       console.log('搜索内容:', this.searchQuery);
 
     },
+    onPageClick() {
+      // 获取并复制当前选中的文本
+      const selectedText = window.getSelection().toString(); // 获取选中的文本
+      if (selectedText) {
+        navigator.clipboard.writeText(selectedText)
+          .then(() => {
+            console.log('Text copied to clipboard:', selectedText); // 复制成功
+            this.ProjectDetail.API_method = "复制成功";
+            setTimeout(() => {
+              this.ProjectDetail.API_method = this.apiMethod;
+            }, 500); // 500ms秒后恢复
+          })
+          .catch(err => {
+            console.error('Failed to copy text:', err); // 复制失败
+          });
+      }
+      // 取消选中状态
+      if (window.getSelection) {
+        window.getSelection().removeAllRanges(); // 兼容现代浏览器
+      } else if (document.selection) {
+        document.selection.empty(); // 兼容 IE
+      }
+    },
+    
     selectItem(index) {
       this.currentIndex = index; // 更新 currentIndex
       const hasContent = this.navItems[index].content;
@@ -201,6 +238,7 @@ export default {
     showProjectDetails(item) {
       this.selectedProject = "project";
       this.ProjectDetail = item;
+      this.apiMethod = this.ProjectDetail.API_method;
     },
     // 返回项目列表的方法
     goBack() {
@@ -223,7 +261,11 @@ export default {
         // 将获取的数据赋值给 contentItems
         this.contentItems = response.map(item => ({
           title: item.title,
-          content: item.content,
+          readme: item.readme,
+          code: item.code,
+          API_url: item.API_url,
+          API_method: item.API_method,
+          code_type: item.code_type,
           image: item.img_path, // 根据实际需求调整
           
           // 项目标题是否正在滚动
@@ -716,6 +758,39 @@ export default {
   width: 40px; 
   height: 40px; 
 }
+
+
+.api-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #343333;
+  border-radius: 16px;
+  margin: 10px 0;
+  width: 100%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  min-height: 80px;
+  user-select: text; 
+}
+
+.api-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #adabab;
+  padding-left: 10px;
+  user-select: text; /* 确保文本可以被选中 */
+}
+
+.api-method {
+  font-size: 20px;
+  font-weight: bold;
+  color: #acaaaa;
+  padding-right: 20px;
+  user-select: text; /* 确保文本可以被选中 */
+}
+
+
 
 @media (max-width: 1200px) {
   .projectItem {

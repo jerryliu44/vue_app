@@ -61,6 +61,7 @@ export default {
   },
   mounted() {
     Prism.highlightElement(this.$refs.code); // 对代码块进行高亮
+    console.log(this.language);
   },
   methods: {
     copyToClipboard() {
@@ -160,6 +161,7 @@ pre {
   word-wrap: break-word; /* 允许单词换行 */
   padding: 8px; /* 内边距 */
   padding-bottom: 30px;
+  user-select: text; /* 允许文本选择 */
 }
 
 /* 自定义滚动条 */
