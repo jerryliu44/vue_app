@@ -114,6 +114,44 @@
             <ImageZoom :imageSrc="`/images/uploads/ADB/${ProjectDetail.image}`" />
           </div>
         </div>
+        
+        <!-- 如果选择仓库，展示仓库 -->
+        <div v-if="selectedProject === 'warehouse' " class="right-sub-container">
+          <div class="right-title">
+            <h1>已创建</h1>
+          </div>
+          <div class="projectBox">
+            <div 
+              class="projectItem placeholder" 
+              @click="UploadProjectitem"
+            >
+              <div class="projectItem-header"></div>
+              <div class="projectItem-body">
+                <h3>+</h3>
+                <p>点击创建新接口</p>
+              </div>
+            </div>
+          </div>
+          <div class="right-title">
+            <h1>已收藏</h1>
+          </div>
+        </div>
+        <!-- 如果选择上传新街口，展示上传页面 -->
+        <div v-if="selectedProject === 'uploadproject' " class="right-sub-container">
+          <div class="project-details-box">
+
+            <h1 style="margin-top: 40px;">README.md</h1>
+            <div>
+              <div>
+                <CodeInputBlock 
+                  
+                  placeholder="请在此输入 README 内容..." 
+                  :rows="5" 
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -125,6 +163,7 @@ import { get_adbScripts_list } from '@/api/api';
 // import FileTree from '../components/FileTree.vue';
 // import ImageZoom from '../components/ImageZoom.vue';
 import CodeBlock from '../components/CodeBlock.vue';
+import CodeInputBlock from '../components/CodeInputBlock.vue';
 
 // 异步加载组件
 const MarkdownPreview = () => import('../components/MarkdownPreview.vue');
@@ -137,6 +176,7 @@ export default {
     MarkdownPreview,
     ImageZoom,
     CodeBlock,
+    CodeInputBlock,
   },
   data() {
     return {
@@ -151,17 +191,21 @@ export default {
 
       // 导航栏内容
       navItems: [
-        { title: '发现', content: '', subItems: [], image: '/images/发现.png' },
-        { 
+        { title: '发现', content: '', subItems: [], image: '/images/发现.png', route: 'projectlist' },
+        // 下拉框形式
+        /* 
+        {
           title: '仓库', 
           content: '仓库', 
           subItems: [
-            { title: '详情1', route: '/domain-detail1' },
-            { title: '详情2', route: '/domain-detail2' }
+            { title: '详情1', route: 'warehouse' },
+            { title: '详情2', route: '/warehouse' }
           ], 
           image: '/images/仓库.png'
-        },
-        { title: '敬请期待', content: '', subItems: []},
+        }
+        */
+        { title: '仓库', content: '', subItems: [], image: '/images/仓库.png', route: 'warehouse' },
+        { title: '敬请期待', content: '', subItems: [], route: '/404'},
       ],
       // 右侧内容栏内容
       contentItems: [],
@@ -184,7 +228,14 @@ export default {
       console.log('搜索内容:', this.searchQuery);
 
     },
+    // 页面点击逻辑
     onPageClick() {
+      // 检查点击的目标是否为输入框/
+      const target = event.target;
+      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
+        return; // 如果点击的是输入框，直接返回，不执行复制逻辑
+      }
+      
       // 获取并复制当前选中的文本
       const selectedText = window.getSelection().toString(); // 获取选中的文本
       if (selectedText) {
@@ -221,9 +272,12 @@ export default {
         }
       } else { // 如果是普通标签
         this.expandedIndexes = this.expandedIndexes.filter(i => i !== index); // 关闭所有展开的下拉框
-        this.navigateTo(this.items[index].route);
+        if (this.navItems[index].route.startsWith('/')) {
+          this.navigateTo(this.navItems[index].route)
+        }else{
+          this.selectedProject = this.navItems[index].route;
+        }
       }
-
       // 切换 active 类
       this.$nextTick(() => {
         const activeElements = document.querySelectorAll('#left-navigation-scroll li.active');
@@ -234,6 +288,7 @@ export default {
     navigateTo(route) {
       this.$router.push(route);
     },
+    
     // 点击项目时调用的方法
     showProjectDetails(item) {
       this.selectedProject = "project";
@@ -253,6 +308,10 @@ export default {
       link.href = imageUrl;
       link.download = 'picture.png';  // 设置下载的文件名
       link.click();  // 触发点击事件，开始下载
+    },
+    // 上传创建的接口
+    UploadProjectitem() {
+      this.selectedProject = 'uploadproject';
     },
     // api获取项目列表
     async fetchContentItems() {
@@ -790,6 +849,11 @@ export default {
   user-select: text; /* 确保文本可以被选中 */
 }
 
+.upload-box {
+  backdrop-filter: blur(100px);
+  -webkit-backdrop-filter: blur(100px);
+  background: rgba(33, 37, 41, 0.75);
+}
 
 
 @media (max-width: 1200px) {
