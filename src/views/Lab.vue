@@ -121,10 +121,7 @@
             <h1>已创建</h1>
           </div>
           <div class="projectBox">
-            <div 
-              class="projectItem placeholder" 
-              @click="UploadProjectitem"
-            >
+            <div class="projectItem placeholder" @click="Upload" >
               <div class="projectItem-header"></div>
               <div class="projectItem-body">
                 <h3>+</h3>
@@ -139,17 +136,17 @@
         <!-- 如果选择上传新街口，展示上传页面 -->
         <div v-if="selectedProject === 'uploadproject' " class="right-sub-container">
           <div class="project-details-box">
-
             <h1 style="margin-top: 40px;">README.md</h1>
             <div>
-              <div>
-                <CodeInputBlock 
-                  
-                  placeholder="请在此输入 README 内容..." 
-                  :rows="5" 
-                />
-              </div>
+              <CodeInputBlock language="markdown" placeholder="请在此输入 README 内容..." :rows="5" />
             </div>
+            <h1 style="margin-top: 40px;">Code</h1>
+            <div>
+                <CodeInputBlock language="" placeholder="......" :rows="13" />
+            </div>
+            <button class="img_button" @click="goBack" style="margin-left: auto;">
+                <img class="arrow-icon" src="/images/返回.png" alt="返回" />
+            </button>
           </div>
         </div>
       </div>
@@ -159,9 +156,6 @@
 
 <script>
 import { get_adbScripts_list } from '@/api/api';
-// import MarkdownPreview from '../components/MarkdownPreview.vue';
-// import FileTree from '../components/FileTree.vue';
-// import ImageZoom from '../components/ImageZoom.vue';
 import CodeBlock from '../components/CodeBlock.vue';
 import CodeInputBlock from '../components/CodeInputBlock.vue';
 
@@ -228,12 +222,12 @@ export default {
       console.log('搜索内容:', this.searchQuery);
 
     },
-    // 页面点击逻辑
+    // 页面点击逻辑(这个是导致一系列点击逻辑的问题来源)
     onPageClick() {
-      // 检查点击的目标是否为输入框/
+      // 检查点击的目标是否为输入框/文本框
       const target = event.target;
-      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
-        return; // 如果点击的是输入框，直接返回，不执行复制逻辑
+      if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT' || target.isContentEditable) {
+        return; // 如果点击的是输入框或可编辑区域，直接返回，不执行复制逻辑
       }
       
       // 获取并复制当前选中的文本
@@ -309,9 +303,13 @@ export default {
       link.download = 'picture.png';  // 设置下载的文件名
       link.click();  // 触发点击事件，开始下载
     },
-    // 上传创建的接口
-    UploadProjectitem() {
+    // 进入上传界面
+    Upload() {
       this.selectedProject = 'uploadproject';
+    },
+    // 上传项目
+    UploadProjectitem(readme, code) {
+                  
     },
     // api获取项目列表
     async fetchContentItems() {
