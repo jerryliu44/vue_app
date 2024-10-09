@@ -138,14 +138,15 @@
           <div class="project-details-box">
             <h1 style="margin-top: 40px;">README.md</h1>
             <div>
-              <CodeInputBlock language="markdown" placeholder="请在此输入 README 内容..." :rows="5" />
+              <CodeInputBlock ref="readmeInput" language="markdown" placeholder="请在此输入 README 内容..." :rows="5" />
             </div>
             <h1 style="margin-top: 40px;">Code</h1>
             <div>
-                <CodeInputBlock language="" placeholder="......" :rows="13" />
+              <CodeInputBlock ref="codeInput" language="" placeholder="......" :rows="13" />
             </div>
-            <button class="img_button" @click="goBack" style="margin-left: auto;">
-                <img class="arrow-icon" src="/images/返回.png" alt="返回" />
+            <button class="img_button" @click="UploadProjectitem" style="margin-left: auto;">
+                <img v-if="!Uploadsuccess" class="arrow-icon" src="/images/上传.png" alt="上传" />
+                <img v-if="Uploadsuccess" class="arrow-icon" src="/images/完成.png" alt="完成" />
             </button>
           </div>
         </div>
@@ -155,7 +156,7 @@
 </template>
 
 <script>
-import { get_adbScripts_list } from '@/api/api';
+import { get_adbScripts_list, add_adbScripts_list } from '@/api/api';
 import CodeBlock from '../components/CodeBlock.vue';
 import CodeInputBlock from '../components/CodeInputBlock.vue';
 
@@ -182,7 +183,7 @@ export default {
       markdownContent: '',
       apiMethod:'',                       // 存储ProjectDetail.API_method
       PictureBasePath: '/images/uploads/ADB',
-
+      Uploadsuccess: false,               // 上传审核状态
       // 导航栏内容
       navItems: [
         { title: '发现', content: '', subItems: [], image: '/images/发现.png', route: 'projectlist' },
@@ -224,6 +225,10 @@ export default {
     },
     // 页面点击逻辑(这个是导致一系列点击逻辑的问题来源)
     onPageClick() {
+      // 检查当前选中的项目
+      if (this.selectedProject === 'uploadproject') {
+        return; // 如果是 uploadproject 页面，直接返回
+      }
       // 检查点击的目标是否为输入框/文本框
       const target = event.target;
       if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT' || target.isContentEditable) {
@@ -308,9 +313,42 @@ export default {
       this.selectedProject = 'uploadproject';
     },
     // 上传项目
-    UploadProjectitem(readme, code) {
-                  
+    async UploadProjectitem() {
+      const readmeContent = this.$refs.readmeInput.getValue();
+      const codeContent = this.$refs.codeInput.getValue();
+      
+      if (readmeContent && codeContent) {
+        const params = {
+          title: "待审核",
+          readme: readmeContent,
+          code: codeContent,
+          code_type: "JavaScript",
+          tags: [],
+          create_user: "liuyh",
+          update_user: "liuyh"
+        };
+        try {
+          const response = await add_adbScripts_list(params); 
+          console.log('审核已发送', response);
+          
+          this.Uploadsuccess = true; 
+          setTimeout(() => {
+            this.Uploadsuccess = false; 
+          }, 1000);
+          
+          this.$refs.readmeInput.clearContent();
+          this.$refs.codeInput.clearContent();
+          
+        } catch (error) {
+          console.error('add_adbScripts_list请求出错:', error); 
+        }
+      } else {
+        if (!readmeContent) this.$refs.readmeInput.shakeBlock();
+        if (!codeContent) this.$refs.codeInput.shakeBlock();
+        return;
+      }
     },
+
     // api获取项目列表
     async fetchContentItems() {
       try {

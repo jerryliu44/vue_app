@@ -1,50 +1,50 @@
 <template>
-    <div class="code-input-block">
-      <div class="code-header" :style="{ marginBottom: isCodeVisible ? '8px' : '0' }">
-        <div class="button close"></div>
-        <div class="button minimize"></div>
-        <div class="button maximize"></div>
-        <span class="language-label" style="margin-left: 3px;">{{ language }}</span>
-        <div class="icon-container">
-          <img
-            v-if="!copySuccess"
-            src="/images/复制.png"
-            alt="Copy"
-            class="copy-button"
-            @click="copyToClipboard"
-          />
-          <img
-            v-if="copySuccess"
-            src="/images/复制成功.png"
-            alt="Success"
-            class="copy-button success"
-          />
-          <img
-            src="/images/下拉.png"
-            alt="Dropdown"
-            class="copy-button second-icon"
-            @click="toggleCodeBlock"
-            :class="{ 'rotate': !isCodeVisible }"
-          />
-        </div>
+  <div class="code-input-block" :class="{ shake: isShaking }">
+    <div class="code-header" :style="{ marginBottom: isCodeVisible ? '8px' : '0' }">
+      <div class="button close"></div>
+      <div class="button minimize"></div>
+      <div class="button maximize"></div>
+      <span class="language-label" style="margin-left: 3px;">{{ language }}</span>
+      <div class="icon-container">
+        <img
+          v-if="!copySuccess"
+          src="/images/复制.png"
+          alt="Copy"
+          class="copy-button"
+          @click="copyToClipboard"
+        />
+        <img
+          v-if="copySuccess"
+          src="/images/复制成功.png"
+          alt="Success"
+          class="copy-button success"
+        />
+        <img
+          src="/images/下拉.png"
+          alt="Dropdown"
+          class="copy-button second-icon"
+          @click="toggleCodeBlock"
+          :class="{ 'rotate': !isCodeVisible }"
+        />
       </div>
-      <transition name="fade">
-        <div v-if="isCodeVisible">
-          <textarea
-            v-model="codeInput"
-            :placeholder="placeholder"
-            :rows="rows"
-            style="width: 100%; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; padding: 10px; resize: none;"
-            @input="updateHighlightedCode"
-          >
-            <pre>
-              <code v-html="highlightedCode"></code>
-            </pre>
-          </textarea>
-        </div>
-      </transition>
     </div>
-  </template>
+    <transition name="fade">
+      <div v-if="isCodeVisible">
+        <textarea
+          v-model="codeInput"
+          :placeholder="placeholder"
+          :rows="rows"
+          style="width: 100%; margin-top: 10px; border: 1px solid #ccc; border-radius: 4px; padding: 10px; resize: none;"
+          @input="updateHighlightedCode"
+        >
+        <pre>
+          <code v-html="highlightedCode"></code>
+        </pre>
+        </textarea>
+      </div>
+    </transition>
+  </div>
+</template>
   
   <script>
   import Prism from 'prismjs';
@@ -71,6 +71,7 @@
         isCodeVisible: true, // 控制代码块显示与隐藏的状态
         copySuccess: false, // 控制复制成功状态
         codeInput: '', // 用户输入的代码
+        isShaking: false, // 控制抖动状态
       };
     },
     computed: {
@@ -100,6 +101,20 @@
       },
       toggleCodeBlock() {
         this.isCodeVisible = !this.isCodeVisible; // 切换代码块的显示状态
+      },
+      getValue() {
+        return this.codeInput;
+      },
+      clearContent() {
+        this.codeInput = ''; // 将 codeInput 设为空字符串
+        this.updateHighlightedCode(); // 更新高亮显示
+      },
+      // 新增：触发抖动效果
+      shakeBlock() {
+        this.isShaking = true; // 设置抖动状态为 true
+        setTimeout(() => {
+          this.isShaking = false; // 在0.5秒后重置状态
+        }, 500);
       },
     },
   };
@@ -192,4 +207,19 @@
   .fade-enter, .fade-leave-to /* (可以使用 .fade-leave-active 代替) */ {
     opacity: 0; /* 在进入和离开时的透明度 */
   }
+
+  /* 添加抖动动画 */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+  }
+
+  /* 绑定抖动效果的类 */
+  .shake {
+    animation: shake 0.5s;
+  }
+  
+  
   </style>
