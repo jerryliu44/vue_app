@@ -95,8 +95,8 @@
                         <!-- <a class="projectItem a" target="_blank" @click.prevent="handleClick"> -->
                         <a class="projectItem a" @click="goToScriptRepository" href="javascript:void(0)">
                             <div class="projectItemLeft">
-                                <h1>ADB Script</h1>
-                                <p>导航</p>
+                                <h1>ADB</h1>
+                                <p>集合小仓</p>
                             </div>
                             <div class="projectItemRight">
                                 <img src="/images/foodIcon/面包.png" alt="">

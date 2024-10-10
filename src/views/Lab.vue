@@ -51,7 +51,7 @@
 
           <div class="projectBox">
             <!-- 项目列表 -->
-            <div class="projectItem" v-for="(item, index) in contentItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
+            <div class="projectItem" v-for="(item, index) in approvedItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
               <div class="projectItem-header">
                 <img class="projectItem-image" :src="`${PictureBasePath}/${item.image}`" :alt="item.title" />
               </div>
@@ -81,7 +81,7 @@
             </button>
             <div style="display: flex; align-items: center;">
               <h1>README.md</h1>
-              <button class="img_button" @click="showPicture" style="margin-left: auto;">
+              <button class="img_button" @click="goPicture" style="margin-left: auto;">
                 <img class="picture-icon" src="/images/相册.png" alt="Picture Icon">
               </button>
             </div>
@@ -120,7 +120,7 @@
           <div class="right-title">
             <h1>已创建</h1>
           </div>
-          <div class="projectBox">
+          <div class="projectBox" :style="{ maxHeight: '200px' }">
             <div class="projectItem placeholder" @click="Upload" >
               <div class="projectItem-header"></div>
               <div class="projectItem-body">
@@ -128,14 +128,34 @@
                 <p>点击创建新接口</p>
               </div>
             </div>
+            <div class="projectItem" v-for="(item, index) in unapprovedItems" :key="item.id" @click="showProjectDetails(item)" @mouseover="startScroll(index)" @mouseout="stopScroll(index)">
+              <div class="projectItem-header"></div>
+              <div class="projectItem-body">
+                <div class="scroll-container" :style="{ transform: item.scrollTransform }">
+                  <h3 :ref="`title-${index}`">{{ item.title }}</h3>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="right-title">
             <h1>已收藏</h1>
+          </div>
+          <div class="projectBox" :style="{ maxHeight: '200px' }">
+            <div class="projectItem placeholder" v-for="n in placeholders" :key="'placeholder-' + n">
+              <div class="projectItem-header"></div>
+              <div class="projectItem-body">
+                <h3>加载中...</h3>
+                <p>请稍候</p>
+              </div>
+            </div>
           </div>
         </div>
         <!-- 如果选择上传新街口，展示上传页面 -->
         <div v-if="selectedProject === 'uploadproject' " class="right-sub-container">
           <div class="project-details-box">
+            <button class="img_button" @click="goBack">
+              <img class="arrow-icon" src="/images/返回.png" alt="返回" />
+            </button>
             <h1 style="margin-top: 40px;">README.md</h1>
             <div>
               <CodeInputBlock ref="readmeInput" language="markdown" placeholder="请在此输入 README 内容..." :rows="5" />
@@ -179,12 +199,12 @@ export default {
       expandedIndexes: [],                // 保存所有展开的下拉框索引
       searchQuery: '',                    // 搜索框中的输入值
       selectedProject: "projectlist",     // 界面选择，初始时为projectlist
+      parentProject: "projectlist",       // 界面选择，用于回退，初始时为projectlist
       ProjectDetail: null,                // 存储被点击的项目
       markdownContent: '',
       apiMethod:'',                       // 存储ProjectDetail.API_method
       PictureBasePath: '/images/uploads/ADB',
       Uploadsuccess: false,               // 上传审核状态
-      // 导航栏内容
       navItems: [
         { title: '发现', content: '', subItems: [], image: '/images/发现.png', route: 'projectlist' },
         // 下拉框形式
@@ -202,10 +222,10 @@ export default {
         { title: '仓库', content: '', subItems: [], image: '/images/仓库.png', route: 'warehouse' },
         { title: '敬请期待', content: '', subItems: [], route: '/404'},
       ],
-      // 右侧内容栏内容
       contentItems: [],
-      // 占位符
-      placeholders: 6, // 假设有6个占位符
+      approvedItems: [],
+      unapprovedItems: [],
+      placeholders: 6, // 6个占位符
     };
   },
   mounted() {
@@ -275,6 +295,7 @@ export default {
           this.navigateTo(this.navItems[index].route)
         }else{
           this.selectedProject = this.navItems[index].route;
+          this.parentProject = this.navItems[index].route; // 用于回退
         }
       }
       // 切换 active 类
@@ -294,12 +315,12 @@ export default {
       this.ProjectDetail = item;
       this.apiMethod = this.ProjectDetail.API_method;
     },
-    // 返回项目列表的方法
-    goBack() {
-      this.selectedProject = "projectlist";
-    },
-    showPicture() {
+    goPicture() {
       this.selectedProject = "picture";
+    },
+    // 回退
+    goBack() {
+      this.selectedProject = this.parentProject;
     },
     downloadPicture() {
       const imageUrl = `${this.PictureBasePath}/${this.ProjectDetail.image}`;  // 使用反引号定义模板字符串
@@ -353,8 +374,7 @@ export default {
     async fetchContentItems() {
       try {
         const response = await get_adbScripts_list();
-        // 将获取的数据赋值给 contentItems
-        this.contentItems = response.map(item => ({
+        const items = response.map(item => ({
           title: item.title,
           readme: item.readme,
           code: item.code,
@@ -362,11 +382,17 @@ export default {
           API_method: item.API_method,
           code_type: item.code_type,
           image: item.img_path, // 根据实际需求调整
+          underview: item.underview, // 是否已审核
           
           // 项目标题是否正在滚动
           isScrolling: false,
           scrollTransform: 'translateX(0)',
         }));
+
+        // 分类已审核和未审核的项目
+        this.contentItems = items; // 存储所有项目
+        this.approvedItems = items.filter(item => item.underview === true); // 存储已审核项目
+        this.unapprovedItems = items.filter(item => item.underview === false); // 存储未审核项目
       } catch (error) {
         console.error('获取项目列表失败:', error);
       }
