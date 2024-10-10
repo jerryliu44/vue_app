@@ -10,6 +10,7 @@ import Home from '../views/Home.vue';
 const NotFound = () => import('../views/404.vue');
 const Laboratory = () => import('../views/Lab.vue');
 const ScriptRepository = () => import('../views/ScriptRepository.vue');
+const HotNews = () => import('../views/HotNews.vue');
 
 Vue.use(Router);
 
@@ -31,6 +32,11 @@ const router = new Router({
       component: Laboratory
     },
     {
+      path: '/news',
+      name: 'HotNews',
+      component: HotNews
+    },
+    {
       path: '*', // 捕捉所有未匹配的路径
       name: 'NotFound',
       component: NotFound
@@ -39,19 +45,32 @@ const router = new Router({
 });
 
 
+
+router.beforeEach((to, from, next) => {
+  // 页面导航开始时显示加载界面
+  store.dispatch('showLoading');
+  next();
+  // setTimeout(() => { next(); }, 500); 延时导航
+});
+
 router.afterEach((to, from) => {
-  if (document.readyState === 'complete') {
-    // 页面已经加载完成时直接隐藏
+  const hideLoadingWithDelay = () => {
+
     store.dispatch('hideLoading');
+    
+    // setTimeout(() => { store.dispatch('hideLoading'); }, 500); 延时隐藏
+  };
+
+  if (document.readyState === 'complete') {
+    hideLoadingWithDelay();
   } else {
     // 页面还未加载完成时，监听 load 事件
     const onLoad = () => {
-      store.dispatch('hideLoading');
+      hideLoadingWithDelay();
       window.removeEventListener('load', onLoad); // 只监听一次
     };
     window.addEventListener('load', onLoad);
   }
 });
-
 
 export default router;

@@ -93,9 +93,9 @@
                     site </div>
                     <div class="projectList">
                         <!-- <a class="projectItem a" target="_blank" @click.prevent="handleClick"> -->
-                        <a class="projectItem a" @click="goToScriptRepository" href="javascript:void(0)">
+                        <a class="projectItem a" @click="goToLaboratory" href="javascript:void(0)">
                             <div class="projectItemLeft">
-                                <h1>ADB</h1>
+                                <h1>接口仓库</h1>
                                 <p>集合小仓</p>
                             </div>
                             <div class="projectItemRight">
@@ -103,17 +103,17 @@
                             </div>
 
                         </a>
-                        <a class="projectItem a" @click="goToScriptRepository" href="javascript:void(0)">
+                        <a class="projectItem a" @click="goToHotnews" href="javascript:void(0)">
                             <div class="projectItemLeft">
-                                <h1>云盘</h1>
-                                <p>存储收集文件</p>
+                                <h1>热点</h1>
+                                <p>今日热点</p>
                             </div>
                             <div class="projectItemRight">
                                 <img src="/images/foodIcon/牛油果.png" alt="">
                             </div>
 
                         </a>
-                        <a class="projectItem a" @click="goToLaboratory" href="javascript:void(0)">
+                        <a class="projectItem a" @click="goToNotFound" href="javascript:void(0)">
                             <div class="projectItemLeft">
                                 <h1>实验室</h1>
                                 <p>收集有趣html作品</p>
@@ -265,6 +265,9 @@
             },
             goToScriptRepository() {
                 this.$router.push({ name: 'ScriptRepository' });
+            },
+            goToHotnews() {
+                this.$router.push({ name: 'HotNews' });
             },
             toggleClass(selector, className) {
                 var elements = document.querySelectorAll(selector);
