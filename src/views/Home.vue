@@ -201,6 +201,7 @@
     import LoadingSpinner from '@/components/LoadingSpinner.vue';
     import BackgroundFilter from '@/components/BackgroundFilter.vue';
     import { mapState, mapActions } from 'vuex';
+    import AES from "@/common/aes.js"
     
     export default {
         name: 'MainContent',
@@ -258,7 +259,7 @@
         },
         methods : {
             goToNotFound() {
-                this.$router.push({ name: 'NotFound' });  // 触发事件来切换页面
+                this.$router.push({ name: 'NotFound' });  // 触发事件来切换页面  
             },
             goToLaboratory() {
                 this.$router.push({ name: 'Laboratory' });

@@ -7,6 +7,17 @@ import {
 } from '../axios/http.js'
 import GLOBAL from '../common/global.js'
 
+const params = {
+                    username: AES.Encrypt('jerryliu44'),
+                    password: AES.Encrypt('jerryliu44')
+                };
+                Api.get_example(params)
+                .then(response => {
+                    console.log('Login successful:', response);
+                })
+                .catch(error => {
+                    console.error('Login failed:', error);
+                });
 export const get_example = (params) => post(`${GLOBAL.HOME}/auth/login`, params)
 // export const DetailLook = (params) => get(`${GLOBAL.HOME}/ticket/check`, params)
 

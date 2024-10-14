@@ -19,7 +19,7 @@
                   v-model="searchQuery" 
                   @keydown.enter="handleSearch" 
                 />
-                <img src="your-search-icon-path.png" class="sub-container-title-search-icon" alt="search icon">
+                <img src="/images/搜索_灰色.png" class="sub-container-title-search-icon" alt="search icon">
             </div>
           </div>
           <div class="sub-container-body">
@@ -125,13 +125,13 @@ export default {
     background: linear-gradient(
         to top right,
         rgba(255, 255, 255, 0.9) 0%,
-        rgba(255, 255, 255, 0.9) 20%,  /* 增加白色停靠点 */
-        rgba(240, 251, 251, 0.9) 50%,  /* 淡灰色 */
-        rgba(230, 248, 248, 0.9) 60%,  /* 更淡的灰色 */
-        rgba(224, 249, 249, 0.9) 70%,  /* 灰色 */
-        rgba(219, 247, 247, 0.9) 80%,  /* 浅蓝色 */
-        rgba(207, 241, 241, 0.9) 90%,  /* 更浅的蓝色 */
-        rgba(188, 236, 236, 0.9) 100%  /* 较深的蓝色 */
+        rgba(255, 255, 255, 0.9) 20%,  
+        rgba(240, 251, 251, 0.9) 50%,  
+        rgba(230, 248, 248, 0.9) 60%,  
+        rgba(224, 249, 249, 0.9) 70%, 
+        rgba(219, 247, 247, 0.9) 80%, 
+        rgba(207, 241, 241, 0.9) 90%, 
+        rgba(188, 236, 236, 0.9) 100% 
     );
     z-index: 1000;
     
@@ -219,7 +219,7 @@ export default {
 
 .sub-container-title-search-icon {
   position: absolute;
-  right: 10px;
+  right: 18px;
   top: 50%;
   transform: translateY(-50%); 
   width: 20px; 
