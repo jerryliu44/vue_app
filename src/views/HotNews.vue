@@ -56,35 +56,42 @@ export default {
   data() {
     return {
       searchQuery: '',
-      HotNewsItem: [
-        { title: '4 hours ago', content: '嗨，我是通义灵码，你的智能编码助手。你可以问我编码相关的问题，也可以一起更高效、更高质量地完成编码工作。通过帮助文档，了解更多关于我的信息，或提交反馈让我变得更好。同时，你可以前往官网了解更多企业版的信息。', subItems: [], image: '/images/发现.png', route: 'projectlist' },
-        { title: '4 hours ago', content: '4 hours ago', subItems: [], imageUrl: '/images/发现.png', route: 'projectlist' },
-        { title: '4 hours ago', content: '4 hours ago', subItems: [], image: '/images/发现.png', route: 'projectlist' },
-      ],
+      HotNewsItem: [],
     }
   },
-  method: {
+  mounted() {
+    this.fetchHotNewsItem();
+  },
+  methods: {
     async fetchHotNewsItem() {
-      try {
-        const response = await get_hotNews_list();
-        this.HotNewsItem = response.map(item => ({
-          index: item.index,
-          hot: item.hot,
-          title: item.title,
-          pic: item.pic,
-          url: item.url,
-          mobilUrl: item.mobilUrl,
-          desc: item.desc, 
-          
-          // 项目标题是否正在滚动
-          isScrolling: false,
-          scrollTransform: 'translateX(0)',
-        }));
+    try {
+      const response = await get_hotNews_list(); 
+      if (response && typeof response === 'object') {
+        Object.keys(response).forEach(key => {
+          const items = response[key]; 
+          if (Array.isArray(items)) {
+            items.forEach(item => {
+              this.HotNewsItem.push({
+                index: item.index,       
+                hot: item.hot,           
+                title: item.title,       
+                pic: item.pic || '',    
+                url: item.url,           
+                mobilUrl: item.mobile || '',
+                desc: item.content || '',  
+                resource: key,            
 
-      } catch (error) {
-        console.error('获取hotNews列表失败:', error);
+              });
+            });
+          }
+        });
+      } else {
+          console.error('获取热新闻列表失败，返回的数据格式不正确');
       }
-    },
+    } catch (error) {
+        console.error('获取 hotNews 列表失败:', error);
+    }
+  },
   },
 }
 </script>
