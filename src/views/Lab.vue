@@ -88,7 +88,6 @@
             
             <div><MarkdownPreview :markdownText="ProjectDetail.readme" /></div>
             <!-- 项目详细信息 -->
-            <!-- <FileTree /> -->
             <div style="display: flex; flex-direction: column;">
               <h1>API</h1>
               <div class="api-block">
