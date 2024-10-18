@@ -84,12 +84,6 @@ export default {
       loading: true, // 控制加载状态
       selectedItem: null, // 存储当前选中的条目
       cubeIframeUrls: [
-        'https://example.com/page1',
-        'https://example.com/page2',
-        'https://example.com/page3',
-        'https://example.com/page4',
-        'https://example.com/page5',
-        'https://example.com/page6',
       ],
     }
   },
