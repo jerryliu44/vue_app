@@ -83,7 +83,12 @@ export default {
       HotNewsItem: [],
       loading: true, // 控制加载状态
       selectedItem: null, // 存储当前选中的条目
+      PictureBasePath: '/images/uploads/ADB',
       cubeIframeUrls: [
+        this.PictureBasePath + '/22.png',
+        this.PictureBasePath + '/22.png',
+        this.PictureBasePath + '/22.png',
+        this.PictureBasePath + '/22.png',
       ],
     }
   },
