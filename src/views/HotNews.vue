@@ -32,9 +32,10 @@
                   class="styled-iframe">
                 </iframe>
               </div> -->
-              <div>
-                <RotatingCube :iframeUrls="cubeIframeUrls" />
-              </div>
+              
+              <div><!-- <RotatingCube :iframeUrls="cubeIframeUrls" /> --></div>
+              <Earth />
+              
             </div>
             <div class="sub-container-body-right-side">
               <div class="sub-container-body-right-side-title">Recommended</div>
@@ -71,11 +72,13 @@
 import { get_hotNews_list } from '@/api/api';
 import { formatTimeAgo } from '@/common/timer'
 import RotatingCube from '@/components/test.vue'; // 引入组件
+import Earth from '@/components/Earth.vue';
 
 export default {
   name: 'HotNews',
   components: {
-    RotatingCube,
+    // RotatingCube,
+    Earth,
   },
   data() {
     return {
